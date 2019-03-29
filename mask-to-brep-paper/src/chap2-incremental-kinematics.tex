@@ -1,0 +1,109 @@
+\section{Incremental Kinematics}
+%
+
+\newcommand{\ds}{\displaystyle}
+\newcommand{\mparen}[1]{\displaystyle \big( #1 \big)}
+\newcommand{\mbrack}[1]{\displaystyle \big[ #1 \big]}
+\newcommand{\bparen}[1]{\displaystyle \bigg( #1 \bigg)}
+\newcommand{\bbrack}[1]{\displaystyle \bigg[ #1 \bigg]}
+
+The Jaumann rate of stress for a linear hypoelastic material is characterized by:
+
+$$ \overset{\Delta}{\sigma} \equiv 
+\dot{\sigma} + \sigma \cdot W - W \cdot \sigma = 
+C : D $$
+
+where $ D = \frac{1}{2} (L + L^\top), \; W = \frac{1}{2} (L - L^\top)$, and $L = \dot{F}
+F^{-1} $. We would like to know how the stress state changes after applying
+a prescribed deformation. Our approach is as follows: parameterize the deformation
+into separate stages of pure stretch and pure rotation. The advantage of this
+approach is that it allows the terms in the stress rate above to be integrated
+separately
+
+\begin{align*}
+\dot{\sigma} = 
+\begin{cases}
+C : D & \qquad \text{W vanishes for pure stretch} \\
+W \cdot \sigma - \sigma \cdot W & \qquad \text{D vanishes for pure rotation}
+\end{cases}
+\end{align*}
+
+Simple analytic solutions exist for each of these ordinary differential equations, 
+provided that $D, W$ are constant ($C$ is also assumed to be constant):
+
+\begin{align*}
+\dot{\sigma}(t) = C : D, \; \sigma(0) = \sigma_i 
+\qquad 
+& \Longrightarrow 
+\qquad 
+\sigma_{i+\frac{1}{2}}  = \sigma_i + C : D \Delta t \\ \\
+\dot{\sigma}(t) = W \cdot \sigma - \sigma \cdot W, \; \sigma(0) = \sigma_{i+\frac{1}{2}} 
+\qquad 
+& \Longrightarrow 
+\qquad 
+\sigma_{i+1} = \exp(W \Delta t) \; \sigma_{i+\frac{1}{2}} \; \exp(W \Delta t)^{\top}
+\end{align*}
+
+Combining these two results gives us our stress update procedure:
+
+$$ \sigma_{i+1} = \exp(W \Delta t) \; \bparen{\sigma_i + C : D \Delta t} \; \exp(W \Delta t)^{\top} $$
+
+All that remains is to find reasonable approximations for $D, W$. To that end, we
+consider the polar decomposition of the incremental deformation gradient, 
+$F = R \; U$. After taking a time derivative of $F$, and substituting into the
+definition of $L$, we get:
+
+$$ L \equiv D + W = \dot{R} \; R^\top + R \; \dot{U} \; U^{-1} \; R^\top $$
+
+When considering the separate stages of pure stretch and pure rotation, this
+equation reduces to:
+
+\begin{align*}
+\begin{cases}
+D = \dot{U} \; U^{-1} & \qquad \text{pure stretch} \\
+W = \dot{R} \; R^\top & \qquad \text{pure rotation}
+\end{cases}
+\end{align*}
+
+These are constant-coefficient, ordinary differential equations
+than can be used to determine $D$ and $W$. The
+general solution for equations of this form is
+
+$$ 
+Y = \dot{X} X^{-1}, \; X(0) = \mathbf{1} 
+\qquad 
+\Longrightarrow 
+\qquad 
+X(\Delta t) = \exp(Y \Delta t)
+$$
+
+Which, when applied to the pure stretch and pure rotation versions of the problem
+gives us our definitions of $D, W$:
+
+$$ D = \frac{1}{\Delta t} \log(U), \qquad W = \frac{1}{\Delta t} \log(R) $$
+
+Substituting these back into our stress update procedure gives 
+
+$$\boxed{\sigma_{i+1} = R \; \bparen{\sigma_i + C : \log(U)} \; R^\top}$$
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Description}
+\label{Description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Implementation Approaches}
+\label{Implementation Approaches}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Hughes-Winget}
+\label{Hughes-Winget}
+
+\subsubsection{Rashid}
+\label{Rashid}
+
+hi

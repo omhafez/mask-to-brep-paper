@@ -1,0 +1,125 @@
+\section{Finite Element Residual and Tangent Stiffness}
+%
+
+This section discusses the greater context of solid mechanics, and the corresponding finite element system of equations in the presence of finite deformations. According to the developments of the previous section, a strongly objective kinematic algorithm and its implementation are proposed in this setting.
+
+For a continuum body which occupies an open domain $\Omega_0 \subset \mathbb{R}^d$ in its undeformed configuration, the weak form equations of equilibrium may be expressed as
+\begin{equation}
+    R_{i} \equiv \int_{\Omega_0} P_{ij} \phi_{,j} \, d \Omega_0 + \int_{\Gamma_0} p_i \phi \, d \Gamma_0 = 0 \quad \forall i, \phi \in H^1_0 (\Omega_0),
+\end{equation}
+where $\mathbf{P}$ represents the first Piola-Kirchhoff stress tensor, and $\mathbf{p}$ is the Piola traction vector. This representation is amenable to a total Lagrangian approach.
+
+Discuss the need for a consistent linearization of the residual for use in a non-linear Newton solver.
+
+Perhaps without even referring to finite elements, discuss the computations that are needed at the quadrature-point level.
+
+Explain the steps needed for the evaluation of the residual contribution (at a quadrature point), and correspondingly for the evaluation of the tangent contribution:
+
+Elaborate on how to compute exact derivatives of the relevant quantities
+
+include all the derivatives\\
+a complete, full implementation, with code snippet\\
+potentially Sam working on an improved (more novel) implementation of what Mark did\\
+
+\subsection{Generalized Material Update}
+
+In a continuum body $\Omega_0$, a given material point $\mathbf{X} \in \Omega_0$ is endowed with a ``material state'' $S_k (\mathbf{X})$ at time $t_k$. In the context of Lagrangian solid mechanics, the material state $S_k = \left\{ \boldsymbol{\sigma}_{k}, \, q_{*k} \right\}$ consists of the Cauchy stress tensor $\boldsymbol{\sigma}_{k}$, and any (possibly tensorial) internal state variables $q_{*k}$ associated with the material model.
+
+According to the Lagrangian description of motion, a material point initially located at a position $\mathbf{X} \in \Omega_0$ will occupy the spatial position $\mathbf{x}_k$ at some later time $t_k$, undergoing a total displacement $\mathbf{u}_k = \mathbf{x}_k - \mathbf{X}$. In a computational setting, the analysis is subdivided into discrete time steps $\left\{ t_k \right\}_{k=0}^N$, and the motion of material points from time $t_k$ to $t_{k+1}$ is described by an incremental displacement field, denoted $\hat{\mathbf{u}} = \mathbf{u}_{k+1} - \mathbf{u}_{k}$. The deformation associated with this motion may be characterized by an incremental deformation gradient $\hat{\mathbf{F}} = \partial \mathbf{x}_{k+1} / \partial \mathbf{x}_k = \mathbf{1} + \nabla \hat{\mathbf{u}}$. This representation of the deformation taking place in discrete increments is equally suitable for updated or total Lagrangian formulations.
+
+Assuming that the material behaves in a rate-independent manner, a generic material update procedure $f \colon (S_k, \nabla \hat{\mathbf{u}}) \mapsto S_{k+1}$ should yield the updated material state $S_{k+1}$ at time $t_{k+1}$ as a function of the material state $S_k$ at time $t_k$, and the incremental displacement gradient $\nabla \hat{\mathbf{u}}$. The updated stress may then be used to evaluate residual force contributions. If a tangent stiffness matrix must be constructed, the material update procedure must also evaluate the tangent derivatives of the Cauchy stress with respect to the input deformation (i.e. $\partial \boldsymbol{\sigma}_{k+1} / \partial \nabla \hat{\mathbf{u}}$).
+
+Within this generalized framework, the displacement gradient may be optionally modified prior to being passed into the material update procedure, in such a fashion as to accommodate mixed or enhanced degrees of freedom (should these be present), or to apply a strain projection methodology (e.g. an F-bar approach).
+
+\subsection{Hypoelastic Material Update}
+
+For a hypoelastic material, the constitutive model is expressed in rate form:
+\begin{equation}
+        \accentset{\circ}{\boldsymbol{\sigma}} = \mathbb{C} : \mathbf{D},
+\end{equation}
+where $\accentset{\circ}{\boldsymbol{\sigma}}$ denotes a particular co-rotational rate of the Cauchy stress (e.g. the Jaumann stress rate), and $\mathbb{C}$ depends upon the material state.
+
+Most numerical implementations for rate-independent material models of this type consider an increment of strain $\Delta \boldsymbol{\varepsilon}$ as the driving input variable, which is used to evolve the material state via a constitutive update procedure (denoted as $C$), such that
+\begin{equation}
+    S_{k+1} = C (S_{k}, \Delta \boldsymbol{\varepsilon}).
+\end{equation}
+Additionally, a tangent material modulus $\partial \boldsymbol{\sigma}_{k+1} / \partial \Delta \boldsymbol{\varepsilon}$ may be requested if stiffness contributions are needed.
+
+The foregoing constitutive update procedure is sufficient for problems involving small deformations. In the presence of finite deformations, however, an additional procedure $R$ must be defined to allow for rotation of the material state, i.e.
+\begin{equation}
+    S_{k+1} = R (S_k, \mathbf{R}),
+\end{equation}
+such that $\boldsymbol{\sigma}_{k+1} = \mathbf{R} \boldsymbol{\sigma}_{k} \mathbf{R}^T$, and where the material's internal state variables $q_{*k}$ are rotated according to their tensorial character (e.g. $\mathbf{q}_{k+1} = \mathbf{R} \mathbf{q}_k$ if $\mathbf{q}_k$ is a vector-valued quantity). If an evaluation of stiffness terms is required, $\partial \boldsymbol{\sigma}_{k+1} / \partial \mathbf{R}$ must be computed, as well.
+
+Given an input deformation $\nabla \hat{\mathbf{u}}$, it is therefore of interest to compute corresponding strain and rotation increments ($\Delta \boldsymbol{\varepsilon}$ and $\hat{\mathbf{R}}$, respectively) which may be used to update the material state in a step-wise sequence via
+\begin{equation}
+    S_{k+1} = R\big(C(S_k, \Delta \boldsymbol{\varepsilon}), \hat{\mathbf{R}}\big),
+\end{equation}
+or alternatively,
+\begin{equation}
+    S_{k+1} = C\big(R(S_k, \hat{\mathbf{R}}), \Delta \boldsymbol{\varepsilon}\big).
+\end{equation}
+This necessitates the specification of a ``kinematic splitting'' algorithm $K$ of the form
+\begin{equation}
+    \left\{ \Delta \boldsymbol{\varepsilon}, \, \hat{\mathbf{R}} \right\} = K(\nabla \hat{\mathbf{u}}),
+\end{equation}
+which should also be capable of supplying kinematic tangent terms (i.e. $\partial \Delta \boldsymbol{\varepsilon} / \partial \nabla \hat{\mathbf{u}}$ and $\partial \hat{\mathbf{R}} / \partial \nabla \hat{\mathbf{u}}$).
+
+Given a set $\left\{ K, C, R \right\}$ consisting of the aforementioned procedures, a generic hypoelastic meterial update is formulated in algorithm \ref{alg:hypoelastic_update} which is valid for rate independent models.
+\begin{algorithm}
+\begin{spacing}{1.3}
+ \caption{Hypoelastic material update procedure for rate independent models}
+ \label{alg:hypoelastic_update}
+ \begin{algorithmic}[1]
+ \renewcommand{\algorithmicrequire}{\textbf{Input:  }}
+ \renewcommand{\algorithmicensure}{\textbf{Output:  }}
+ \REQUIRE $S_k$ and $\nabla \hat{\mathbf{u}}$
+ \ENSURE  $S_{k+1}$ (optionally $\partial \boldsymbol{\sigma}_{k+1} / \partial \nabla \hat{\mathbf{u}}$)
+    \\ \textit{Kinematic split} :
+    \STATE $\left\{ \Delta \boldsymbol{\varepsilon}, \, \hat{\mathbf{R}} \right\} = K(\nabla \hat{\mathbf{u}})$ (optionally compute $\partial \Delta \boldsymbol{\varepsilon} / \partial \nabla \hat{\mathbf{u}}$ and $\partial \hat{\mathbf{R}} / \partial \nabla \hat{\mathbf{u}}$)
+    \\ \textit{Constitutive update} :
+    \STATE $S_{k+\frac{1}{2}} = C (S_k, \, \Delta \boldsymbol{\varepsilon})$ (optionally compute $\partial \boldsymbol{\sigma}_{k+\frac{1}{2}} / \partial \Delta \boldsymbol{\varepsilon}$)
+    \\ \textit{Rotate state} :
+    \STATE $S_{k+1} = R (S_{k+\frac{1}{2}}, \hat{\mathbf{R}})$ (optionally compute $\partial \boldsymbol{\sigma}_{k+1} / \partial \hat{\mathbf{R}}$)
+    \\ \textit{(Optionally) compute an algorithmically consistent tangent} :
+    \STATE $\frac{\partial \boldsymbol{\sigma}_{k+1}}{\partial \nabla \hat{\mathbf{u}}} = \frac{\partial \boldsymbol{\sigma}_{k+1}}{\partial \hat{\mathbf{R}}} : \frac{\partial \hat{\mathbf{R}}}{\partial \nabla \hat{\mathbf{u}}} + R \big(\frac{\partial \boldsymbol{\sigma}_{k+1/2}}{\partial \Delta \boldsymbol{\varepsilon}} : \frac{\partial \Delta \boldsymbol{\varepsilon}}{\partial \nabla \hat{\mathbf{u}}}, \hat{\mathbf{R}}\big)$
+ \end{algorithmic}
+ \end{spacing}
+ \end{algorithm}
+ 
+\subsection{Kinematic Splitting Algorithm}
+
+The specification of an appropriate kinematic splitting algorithm depends on two primary considerations: the objective stress rate with which the intended algorithm is to maintain consistency, and the desired level of accuracy that the algorithm should achieve.
+
+A material update procedure is called \textit{consistent} with a given objective stress rate if the truncation error $\tau(\Delta t)$ of the algorithm approaches zero in the limit as $\Delta t \rightarrow 0$, i.e.
+\begin{equation}
+    \lim_{\Delta t \rightarrow 0} \tau (\Delta t) = 0.
+\end{equation}
+It suffices to show that 
+\begin{equation}
+    \lim_{\Delta t \rightarrow 0} \frac{\boldsymbol{\sigma}_{k+1} - \boldsymbol{\sigma}_{k}}{\Delta t} = \accentset{\circ}{\boldsymbol{\sigma}} + \mathbf{W} \cdot \boldsymbol{\sigma} - \boldsymbol{\sigma} \cdot \mathbf{W},
+\end{equation}
+where $\Delta t = t_{k+1} - t_{k}$. It can be easily shown that algorithm \ref{alg:hypoelastic_update} is consistent with the Jaumann rate, provided an appropriate kinematic splitting algorithm is employed.
+
+
+\begin{algorithm}
+\begin{spacing}{1.2}
+ \caption{Strongly objective kinematic splitting algorithm}
+ \label{alg:kinematic_splitting}
+ \begin{algorithmic}[1]
+ \renewcommand{\algorithmicrequire}{\textbf{Input:  }}
+ \renewcommand{\algorithmicensure}{\textbf{Output:  }}
+ \REQUIRE $\nabla \hat{\mathbf{u}}$
+ \ENSURE $\Delta \boldsymbol{\varepsilon}$ and $\hat{\mathbf{R}}$ (optionally $\partial \Delta \boldsymbol{\varepsilon} / \partial \nabla \hat{\mathbf{u}}$ and $\partial \hat{\mathbf{R}} / \partial \nabla \hat{\mathbf{u}}$)
+    \\ \textit{Compute the incremental Green-Lagrange strain} :
+    \STATE $\hat{\mathbf{E}} = \frac{1}{2}(\hat{\mathbf{C}} - \mathbf{1}) = \frac{1}{2}(\nabla \hat{\mathbf{u}} + \nabla \hat{\mathbf{u}}^T + \nabla \hat{\mathbf{u}}^T \nabla \hat{\mathbf{u}})$
+    \\ \textit{Compute the eigendecomposition} :
+    \STATE $\frac{1}{2} \mathbf{Q} (\boldsymbol{\Lambda}^2 - \mathbf{1}) \mathbf{Q}^T = \text{eig} (\hat{\mathbf{E}})$
+    \\ \textit{Compute the rotation increment} :
+    \STATE $\hat{\mathbf{R}} = (\mathbf{1} + \hat{\mathbf{u}}) \mathbf{Q} \boldsymbol{\Lambda}^{-1} \mathbf{Q}^T$
+    \\ \textit{Compute the logarithmic strain increment} :
+    \STATE $\Delta \boldsymbol{\varepsilon} = \mathbf{Q} \log (\boldsymbol{\Lambda}) \mathbf{Q}^T$
+ \end{algorithmic}
+ \end{spacing}
+ \end{algorithm}
+

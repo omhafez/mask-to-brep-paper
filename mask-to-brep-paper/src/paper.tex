@@ -1,0 +1,121 @@
+\documentclass[12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%               LATEX COMMANDS FOR DOCUMENT SETUP                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage{bookmark}
+\usepackage[us,nodayofweek,12hr]{datetime}
+\usepackage{graphicx}
+
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{wrapfig}
+\usepackage{textcomp}
+\usepackage[square, comma, numbers, sort&compress]{natbib}
+\usepackage[hang,small,bf]{caption}
+\usepackage{parskip}
+\usepackage[margin=1in,footskip=0.5in]{geometry}
+\usepackage{amsmath}
+\usepackage{mdwlist}
+\usepackage{epstopdf}
+\usepackage[section]{placeins}
+
+\newcommand{\para}{\vspace{5mm} \noindent}
+\newcommand{\parafig}{\vspace{4mm} \noindent}
+\newcommand{\paraeq}{\vspace{1mm} \noindent}
+\newcommand{\negparafig}{\vspace{-4mm} \noindent}
+\newcommand{\negparaeq}{\vspace{-1mm} \noindent}
+
+\addtolength{\parskip}{1\parskip}
+
+\bibliographystyle{plain}
+%\bibliographystyle{ieeetr}
+%many other bibliography styles are available (IEEEtran, mla, etc.). Use one appropriate for your field.
+
+\hyphenation{pre-par-ing} %add hyphenation rules for words TeX doesn't know
+
+%\usepackage[square,comma,numbers,sort&compress]{natbib}
+%\usepackage{hypernat}
+% Other useful packages to try
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{accents}
+
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+%
+% Different fonts to try (uncomment only fontenc and one font at a time)
+% (you may need to install these first)
+%\usepackage[T1]{fontenc} %enable fontenc package if using one of the fonts below
+%\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{tgschola}
+%\usepackage{tgbonum}
+%\usepackage{tgpagella}
+%\usepackage{tgtermes}
+%\usepackage{fourier}
+%\usepackage{fouriernc}
+%\usepackage{kmath,kerkis}
+%\usepackage{kpfonts}
+%\usepackage[urw-garamond]{mathdesign}
+%\usepackage[bitstream-charter]{mathdesign}
+%\usepackage[sc]{mathpazo}
+%\usepackage{mathptmx}
+%\usepackage[varg]{txfonts}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%        DOCUMENT SETUP AND INFORMATION FOR PRELIMINARY PAGES          %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{7cm}
+\begin{center}
+   {\bf\Large Mask to B-rep Paper}
+\end{center}
+
+\vspace{1.5cm}
+\begin{center} 
+{\bf\large Omar Hafez, Mark Rashid}\\
+
+%\vspace{5mm}
+{Department of Civil \& Environmental Engineering}\\
+{University of California, Davis}\end{center}
+
+\abstract{Abstract here}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Each chapter can be in its own file for easier editing and brought in with the \include command.
+% Then use the \includeonly command to speed compilation when working on a particular chapter.
+%%% \includeonly{chap1}
+
+%\newcommand{\bibfont}{\singlespacing}
+% need this command to keep single spacing in the bibliography when using natbib
+
+\include{chap1-introduction}
+\include{chap2-incremental-kinematics}
+\include{chap3-residual-and-stiffness}
+\include{chap4-accuracy}
+\include{chap5-convergence}
+\include{chap6-conclusions}
+\include{chap7-appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
