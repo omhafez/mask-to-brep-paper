@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage[margin=0.75in]{geometry}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                      %
@@ -6,50 +7,142 @@
 %                                                                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\usepackage{bookmark}
+\usepackage{lmodern}
 \usepackage[us,nodayofweek,12hr]{datetime}
 \usepackage{graphicx}
-
-\usepackage{fullpage}
-\usepackage{graphicx}
-\usepackage{tabularx}
-\usepackage{multirow}
+\usepackage{rotating}
 \usepackage{subfigure}
-\usepackage{wrapfig}
-\usepackage{textcomp}
-\usepackage[square, comma, numbers, sort&compress]{natbib}
-\usepackage[hang,small,bf]{caption}
-\usepackage{parskip}
-\usepackage[margin=1in,footskip=0.5in]{geometry}
+\usepackage[none]{hyphenat}
+\emergencystretch 3em
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
 \usepackage{amsmath}
-\usepackage{mdwlist}
-\usepackage{epstopdf}
-\usepackage[section]{placeins}
+\usepackage{enumitem}
+\usepackage[capitalize]{cleveref}
+\usepackage{multirow}
+\usepackage{comment}
+\usepackage{amsfonts}
+\usepackage{courier}
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{afterpage}
+\usepackage{mathtools}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage[backend=biber]{biblatex}
+\renewbibmacro{in:}{}
+\addbibresource{references.bib}
+\let\cite\parencite
 
-\newcommand{\para}{\vspace{5mm} \noindent}
-\newcommand{\parafig}{\vspace{4mm} \noindent}
-\newcommand{\paraeq}{\vspace{1mm} \noindent}
-\newcommand{\negparafig}{\vspace{-4mm} \noindent}
-\newcommand{\negparaeq}{\vspace{-1mm} \noindent}
+\hypersetup{%2
+    pdfborder = {0 0 0}
+}
+\usepackage{bm}
+\usepackage[parfill]{parskip}
 
-\addtolength{\parskip}{1\parskip}
+\newcommand*{\figref}[2][]{%
+  \hyperref[{fig:#2}]{%
+    {Figure~\ref*{fig:#2}}%
+    \ifx\\#1\\%
+    \else
+      \,#1%
+    \fi
+  }%
+}
 
-\bibliographystyle{plain}
+\newcommand*{\tabref}[2][]{%
+  \hyperref[{tab:#2}]{%
+    {Table~\ref*{tab:#2}}%
+    \ifx\\#1\\%
+    \else
+      \,#1%
+    \fi
+  }%
+}
+
+\newcommand*{\eqnref}[2][]{%
+  \hyperref[{eqn:#2}]{%
+    {Equation~\ref*{eqn:#2}}%
+    \ifx\\#1\\%
+    \else
+      \,#1%
+    \fi
+  }%
+}
+
+\newcommand*{\chapref}[2][]{%
+  \hyperref[{chap:#2}]{%
+    {Chapter~\ref*{chap:#2}}%
+    \ifx\\#1\\%
+    \else
+      \,#1%
+    \fi
+  }%
+}
+
+\usepackage{accents}
+\newlength{\dhatheight}
+\newcommand{\doublehat}[1]{%
+    \settoheight{\dhatheight}{\ensuremath{\hat{#1}}}%
+    \addtolength{\dhatheight}{-0.35ex}%
+    \hat{\vphantom{\rule{1pt}{\dhatheight}}%
+    \smash{\hat{#1}}}}
+        
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}   
+
+\hyphenation{dis-ser-ta-tion blue-print man-u-script pre-par-ing}
+
+%\usepackage{bookmark}
+%\usepackage[us,nodayofweek,12hr]{datetime}
+%\usepackage{graphicx}
+
+%\usepackage{fullpage}
+%\usepackage{graphicx}
+%\usepackage{tabularx}
+%\usepackage{multirow}
+%\usepackage{subfigure}
+%\usepackage{wrapfig}
+%\usepackage{textcomp}
+%\usepackage[square, comma, numbers, sort&compress]{natbib}
+%\usepackage[hang,small,bf]{caption}
+%\usepackage{parskip}
+%\usepackage[margin=1in,footskip=0.5in]{geometry}
+%\usepackage{amsmath}
+%\usepackage{mdwlist}
+%\usepackage{epstopdf}
+%\usepackage[section]{placeins}
+
+%\newcommand{\para}{\vspace{5mm} \noindent}
+%\newcommand{\parafig}{\vspace{4mm} \noindent}
+%\newcommand{\paraeq}{\vspace{1mm} \noindent}
+%\newcommand{\negparafig}{\vspace{-4mm} \noindent}
+%\newcommand{\negparaeq}{\vspace{-1mm} \noindent}
+
+%\addtolength{\parskip}{1\parskip}
+
+%\bibliographystyle{plain}
 %\bibliographystyle{ieeetr}
 %many other bibliography styles are available (IEEEtran, mla, etc.). Use one appropriate for your field.
 
-\hyphenation{pre-par-ing} %add hyphenation rules for words TeX doesn't know
+%\hyphenation{pre-par-ing} %add hyphenation rules for words TeX doesn't know
 
 %\usepackage[square,comma,numbers,sort&compress]{natbib}
 %\usepackage{hypernat}
 % Other useful packages to try
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{accents}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+%\usepackage{accents}
 
-\usepackage{setspace}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+%\usepackage{setspace}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
 %
 % Different fonts to try (uncomment only fontenc and one font at a time)
 % (you may need to install these first)
@@ -82,7 +175,7 @@
 
 \vspace{7cm}
 \begin{center}
-   {\bf\Large Mask to B-rep Paper}
+   {\bf\Large Voronoi-Based Surface Generation from Image Masks}
 \end{center}
 
 \vspace{1.5cm}
@@ -93,6 +186,13 @@
 {Department of Civil \& Environmental Engineering}\\
 {University of California, Davis}\end{center}
 
+\vspace{5mm}
+
+\begin{center}
+{\bf Provisional Journal: Graphical Models (Elsevier)}
+\end{center}
+
+\vspace{10mm}
 \abstract{Abstract here}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,16 +205,13 @@
 % need this command to keep single spacing in the bibliography when using natbib
 
 \include{chap1-introduction}
-\include{chap2-incremental-kinematics}
-\include{chap3-residual-and-stiffness}
-\include{chap4-accuracy}
-\include{chap5-convergence}
-\include{chap6-conclusions}
-\include{chap7-appendix}
+\include{chap2-algorithm}
+\include{chap3-performance-assessment}
+\include{chap4-closure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\bibliography{references}
+\printbibliography
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
