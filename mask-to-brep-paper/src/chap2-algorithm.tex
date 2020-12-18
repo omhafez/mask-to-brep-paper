@@ -6,7 +6,7 @@
 \subsection{Point Cloud Generation}
 \label{Point Cloud Generation}
 
-A \textit{segmented image} is a 3D structured array of voxels, each of which has been assigned an identifier
+A \textit{segmented image} or \textit{image mask} is a 3D structured array of voxels, each of which has been assigned an identifier
 that indicates a material type (or void).
 The generation of a segmented image is usually the first processing step applied
 to raw MRI or CT image data.  We confine attention to the single-material case, and take the
@@ -20,7 +20,7 @@ A point cloud is oriented if the surface normal data is included at each point, 
   \item Place a point and associated normal on the approximated boundary surface.
 \end{itemize}
 \vspace{3mm}
-The basic sequence is shown (in 2D for clarity) in panels (a-c) of~\figref{vor} and panels (a-b) of ~\figref{d2dvor}. Each step in the generation of the oriented point cloud is described in turn below.
+The basic sequence is shown (in 2D for clarity) in panels (a-c) of~\figref{vor} and panels (a-b) of ~\figref{d2dvor}. Each step in the generation of the oriented point cloud is described in the subsections below.
 
 \begin{figure}[ht]
 \centering
@@ -57,7 +57,7 @@ The basic sequence is shown (in 2D for clarity) in panels (a-c) of~\figref{vor} 
 %		\includegraphics[scale=0.4]{media/vv/a4.png}
 %\label{fig:d2dvor4}}
 %
-\caption{(a) Segmented image of 2D slice of \textit{ex vivo} canine heart, (b) resulting point cloud, and (c) Voronoi site placement and subsequent Voronoi partitioning and surface extraction}
+\caption{(a) Segmented image of 2D slice of \textit{ex vivo} canine heart, (b) resulting point cloud, and (c) Voronoi site placement and subsequent Voronoi partitioning and surface extraction.}
 \label{fig:d2dvor}
 \end{sidewaysfigure}
 
@@ -74,7 +74,7 @@ A window $\mathcal{W}$ is marked for further processing if it satisfies a thresh
    {\textbf{Variable}} & \textbf{Description} \\ \hline \hline
    $\mathcal{I}$ & set of all voxels in a segmented image \\ \hline
    $\mathcal{W}$ & set of all voxels in a window \\ \hline
-   $m$ & material of interest \\ \hline
+   $\mc{M}$ & subset of $\mc{W}$ occupied by material  \\ \hline
    {$k_{\mathcal{M}}$} & ratio of voxels in $\mathcal{M}$ to voxels in $\mathcal{W}$\\ \hline
    {$\overline{k}_{\mathcal{M}}$ \rule{0mm}{4mm}} & threshold value for $k_{\mathcal{M}}$ \\ \hline 
    $R_{\mathcal{W}}$ & window radius (in voxels) \\ \hline
@@ -84,11 +84,25 @@ A window $\mathcal{W}$ is marked for further processing if it satisfies a thresh
 \label{tab:window}
 \end{table}
 
-\subsubsection{Boundary Approximation}
+\subsubsection{Local Boundary Approximation}
 
-Given a window $\mathcal{W}$, we seek to approximate the boundary between voxels belonging to $\mathcal{M}$ and voxels belonging to $\mathcal{W} \setminus \mathcal{M}$ by a surface $\mathcal{S}$. Assuming $\mathcal{W}$ is marked as intersecting the body boundary, an approximating sphere $\mathcal{D}$ of radius $R$ is defined, such that the center and volume of this sphere equal those of the window $\mathcal{W}$.
+Given a window $\mathcal{W}$ that is marked as intersecting the body boundary, we seek to derive a local boundary-surface patch $\mc{S}$ that optimally represents the boundary separating $\mc{M}$ and $\mc{W} \setminus \mc{M}$.  The overall plan is as follows.  We define geometrically smooth (i.e., not voxelized), disjoint, simply-connected regions that approximate $\mc{W}$ and $\mc{M}$, whose common boundary serves to define the surface patch $\mc{S}$.  The regions and the surface $\mc{S}$ are taken to have simple, parameterizable shapes; optimally fitting them to $\mc{W}$ and $\mc{M}$ therefore reduces to a small algebraic minimization problem.  We require that $\mc{S}$ be non-intersecting, and that it divides the smooth approximation to $\mc{W}$ into exactly two subregions.
 
-Define $\Omega_p$ as the physical space covered by the voxels belonging to $\mathcal{M}$. Define $\Omega$ as the physical space covered by an approximating lens to $\Omega_p$, determined by the space enclosed by the intersection of $\mathcal{D}$ and $\mathcal{S}$. The surface $\mathcal{S}$ is determined by minimizing the error between geometric properties of $\Omega$ and $\Omega_p$~(see~\figref{figure3}).
+Proceeding in this direction, let $\mc{D}$ be a sphere whose center and radius $R$ are chosen so that the centroid and volume of $D$ match those of $\mc{W}$.  Next, we define $\Omega_p$ as the spatial region occupied by $\mc{M}$, and $\Omega$ as the subset of $\mc{D}$ that lies on one side of $\mc{S}$.  We assume that $\mc{S}$ intersects $\partial \mc{D}$ in a simple closed loop, so that $\Omega$ is a simply-connected subset of $\mc{D}$ that resembles a ``lens.''  The situation is illustrated in Figure (\figref{figure3}).  
+
+It remains to provide a concrete parameterization of $\mc{S}$, and a specific objective function through which $\Omega$ is optimally fitted to $\Omega_p$.  To these ends, in this initial exposition we take $\mc{S}$ to be planar, as shown in \figref{figure4}, and we define an objective function via the zeroth, first, and second moments of $\Omega$ and $\Omega_p$: 
+\begin{alignat}{5}
+&{} &&V^p = \int_{\Omega_p}dv, &&{} \\
+I_{x\phantom{z}}^p &= \int_{\Omega_p}xdv, &&I_{y\phantom{z}}^p = \int_{\Omega_p}ydv, &&I_{z\phantom{z}}^p = \int_{\Omega_p}zdv, \\
+I^p_{xy} &= \int_{\Omega_p}xydv, &&I^p_{xz} = \int_{\Omega_p}xzdv, &&I^p_{yz} = \int_{\Omega_p}yzdv, \\
+I^p_{xx} &= \int_{\Omega_p}(y^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{yy} = \int_{\Omega_p}(x^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{zz} = \int_{\Omega_p}(x^2 + y^2)dv.
+\end{alignat}
+Analogous quantities $V$, $I_x$, etc. are defined for $\Omega$.  Taking the coordinate origin to be the common centroid of $\Omega$ and $\Omega_p$, the planar surface $\mc{S}$ is defined by $x' = d$, where the primed coordinates are oriented such that the $x'$ axis is normal to $\mc{S}$, as shown in \figref{figure4}.  In three dimensions, the transformation matrix between primed and unprimed Cartesian frames is given in terms of the polar angles $\psi, \theta$ by
+\begin{gather}
+\bm{R} = \left[\begin{array} {ccc} {\cos\psi\cos\theta} & {-\sin\psi} & {\cos\psi\sin\theta}\\ {\sin\psi\cos\theta} & {\cos\psi} & {\sin\psi\sin\theta}, \\
+{-\sin\theta} & {0} & {\cos\theta}\end{array} \right].
+\end{gather}
+
 
 \begin{figure}[ht]
 \centering
@@ -109,11 +123,9 @@ Define $\Omega_p$ as the physical space covered by the voxels belonging to $\mat
 		\includegraphics[scale=0.72]{media/om/om.pdf}
 \label{fig:subfigure6}}
 
-\caption{Boundary approximation demonstrated in 2D}
+\caption{Boundary approximation demonstrated in 2D.}
 \label{fig:figure3}
 \end{figure}
-
-The open surface $\mathcal{S}$ that approximates the boundary takes an assumed form - for these purposes the boundary is assumed a plane. If the center of the window is defined as the origin, the planar boundary takes the form $x' = d$, where $(x',y',z')$ are the coordinates of a transformed coordinate system and $d$ is the perpendicular distance from the origin to the plane~(see~\figref{quad}).
 
 \begin{figure}[ht!]
 	\centering
@@ -122,32 +134,23 @@ The open surface $\mathcal{S}$ that approximates the boundary takes an assumed f
 	\label{fig:quad}
 \end{figure}
 
-Define the following moments of volume for $\Omega_p$:
-\begin{alignat}{5}
-&{} &&V^p = \int_{\Omega_p}dv, &&{} \\
-I_{x\phantom{z}}^p &= \int_{\Omega_p}xdv, &&I_{y\phantom{z}}^p = \int_{\Omega_p}ydv, &&I_{z\phantom{z}}^p = \int_{\Omega_p}zdv, \\
-I^p_{xy} &= \int_{\Omega_p}xydv, &&I^p_{xz} = \int_{\Omega_p}xzdv, &&I^p_{yz} = \int_{\Omega_p}yzdv, \\
-I^p_{xx} &= \int_{\Omega_p}(y^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{yy} = \int_{\Omega_p}(x^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{zz} = \int_{\Omega_p}(x^2 + y^2)dv.
-\end{alignat}
-
-The zeroth, first, and second moments of volume of $\Omega$ are defined in the same manner, with integrals performed over the domain of $\Omega$ instead. For the purposes of computing an error functional, define the following quantities:
+Turing now to formulation of an error functional, we define the following quantities:
 \begin{alignat}{3}
 f^p &= V^p, \text{\ \ \ \ \ }&&f(d,\psi,\theta) = V, \\
 \bm{g}^p &= \left[\begin{array} {ccc} {I_x^p} \\ {I_y^p} \\ {I_z^p} \end{array} \right], \text{\ \ \ \ \ }&&\bm{g}(d,\psi,\theta) = \left[\begin{array} {ccc} {I_x} \\ {I_y} \\ {I_z} \end{array} \right], \\
 \bm{h}^p &= \left[\begin{array} {ccc} {I_{xx}^p} & {-I_{xy}^p} & {-I_{xz}^p}\\ {-I_{xy}^p} & {I_{yy}^p} & {-I_{yz}^p} \\ -{I_{xz}^p} & {-I_{yz}^p} & {I_{zz}^p} \end{array} \right],\text{\ \ \ \ \ \ \ }&&\bm{h}(d,\psi,\theta) = \left[\begin{array} {ccc} {I_{xx}} & {-I_{xy}} & {-I_{xz}}\\ {-I_{xy}} & {I_{yy}} & {-I_{yz}} \\ -{I_{xz}} & {-I_{yz}} & {I_{zz}} \end{array} \right].
 \end{alignat}
-
-Define the relative errors as:
+Relative errors in the zeroth, first, and second moments of the window's solid subdomain are then defined as
 \begin{align}
 e_0(d,\psi,\theta) &=  \sqrt{\frac{(f - f^p)^2}{(f^p)^2}}, \\
 e_1(d,\psi,\theta) &=  \sqrt{\frac{(g_i - g_i^p)(g_i - g_i^p)}{g_j^{p}g_j^{p}}}, \\
 e_2(d,\psi,\theta) &=  \sqrt{\frac{(h_{ij} - h_{ij}^p)(h_{ij} - h_{ij}^p)}{h_{kl}^{p}h_{kl}^{p}}}.
 \end{align}
-Finally, we define the relative error functional as follows:
+Finally, we define a single scalar error function as
 \begin{align}
 \mathcal{F}(d,\psi,\theta) = \beta_0e_0 + \beta_1e_1 + \beta_2e_2,
 \end{align}
-where $e_0$, $e_1$, and $e_2$ are relative errors between the zeroth, first, and second order moments of volume of $\Omega_p$ and $\Omega$, respectively. They are functions of the boundary parameters $d$, $\psi$, and $\theta$, where $\psi$ and $\theta$ are the yaw and pitch angles defining the plane. The values $\beta_0$, $\beta_1$, and $\beta_2$ are weighting coefficients, where $\beta_2 = 1 - \beta_0 - \beta_1$, and $\beta_i \in [0, 1]$. We seek the solution to the following unconstrained minimization problem: $\displaystyle \min_{d, \psi, \theta} \mathcal{F}(d,\psi,\theta)$, which can be solved by a variety of well-established techniques.
+where $\beta_i$ are adjustable weights in the range $(0,1)$, where $\beta_2 = 1 - \beta_0 - \beta_1$.  The error $\mc{F}$ is an explicit function of the boundary parameters $d$, $\psi$, and $\theta$, where $\psi$ and $\theta$ are the yaw and pitch angles defining the plane and $d$ is the plane's offset from the centroid of the window.  We seek the solution to the following unconstrained minimization problem: $\displaystyle \min_{d, \psi, \theta} \mathcal{F}(d,\psi,\theta)$, which can be solved by a variety of well-established techniques.
 
 The moments of volume of $\Omega_p$ are computed based on a straightforward use of voxel dimensions and the parallel axis theorem. The moments of $\Omega$, on the other hand, are computed based on an intricate dependence on $d$, $\psi$, and $\theta$:
 \begin{align}
@@ -371,34 +374,3 @@ Results of the entire surface generation procedure described in this chapter are
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Shabaka: A Free Image-Based Meshing Tool}
-
-The image-based meshing steps described in this chapter are assembled to form a novel image-based meshing tool \textit{Shabaka}~\cite{shab}, available on GitHub at \href{http://github.com/omhafez/shabaka}{{\url{http://github.com/omhafez/shabaka}}}. A screenshot of the repository on GitHub is shown in~\figref{github}.
-
-\begin{figure}[htbp!]
-\centering
-\vspace{2.5mm}
-\includegraphics[width=1.0\textwidth]{media/2-shabaka/2-surf/7-shabaka.png}
-\caption{Screenshot of Github repo}
-\label{fig:github}
-\end{figure}
-
-Simple instructions are available to install the code on Linux, Mac, or Windows in about 15 minutes. A bash script compiles the code and downloads library dependencies including: \textit{NRRD}~\cite{nrrd} for image mask I/O, \textit{NLopt}~\cite{nlo} for nonlinear optimization, \textit{Qhull}~\cite{barber_1996} for Voronoi partitioning, \textit{ACVD}~\cite{valette_2004} for surface decimation, and \textit{Meshlab}~\cite{meshlab} and \textit{Gmsh}~\cite{geuzaine_2009} for miscellaneous mesh tasks. Libraries are gathered from the standard APT package manager on Ubuntu and from \textit{Homebrew}~\cite{brew} on Mac. The Windows installation makes use of the \textit{Windows Subsystem for Linux (WSL)}, so installation is treated in the same manner as for Ubuntu. Unit tests are available to verify a successful installation and the utility of various components of the code.
-
-Additional free software packages are included in the build to provide an end-to-end image-based meshing pipeline. Namely, \textit{Seg3D}~\cite{Seg3D} is included for image processing and image segmentation functionality, \textit{Tetgen}~\cite{tetgen} for tetrahedral meshing, and \textit{ParaView}~\cite{paraview} for visualization. Following a full installation of the code, the user can: process and segment a medical image in Seg3D to produce an image mask; produce a high-quality surface mesh with Shabaka; produce a tetrahedral mesh using Tetgen; and visualize the resulting mesh in ParaView. Documentation on how to efficiently segment images in Seg3D has been written and included in the GitHub repo, along with essential publications related to steps in the workflow. The tool is catered toward users of simulation, 3D printing, or visualization software. No prior knowledge or understanding of image segmentation, mesh generation, or UNIX is required.
-
-The core code for Shabaka is written in C++ and Fortran, along with Python scripts to facilitate the interaction between different portions of the code with external packages. After processing command-line inputs, the code reads the input image mask in NRRD format. The code automatically resamples segmented images that do not exhibit isotropic voxel spacing. In this manner, the point cloud generation step may assume every input image mask has equal spacing in all three directions. The point cloud generation code in C++ is easily parallelized since boundarys are approximated for each window independently of one another. The final oriented point cloud is exported in PLY format. Voronoi site locations are generated and provided to the Voronoi partitioning tool. The surface mesh is subsequently extracted, cleaned, and decimated. The final surface is exported in both PLY and STL formats.
-
-The code has a simple UNIX environment boundary that offers a number of command-line options. Options include the ability to specify a desired mesh resolution, and whether to automatically call Tetgen to produce a tetrahedral mesh from the surface generated from Shabaka. The option is also available to call the Meshlab implementation of screened Poisson surface reconstruction as an alternative to the default Voronoi-based surface reconstruction technique. Resulting surface meshes from screened Poisson surface reconstruction tend to be over-smoothed compared to those from the Voronoi-based approach. The implementation in Meshlab performs impressively fast, though, and tends to be more robust for particularly challenging surfaces, where in rare cases Voronoi approach fails to produce a valid surface.
-
-Shabaka is currently limited to meshing binary image masks. It can mesh multiple disjoint objects in a single image but cannot currently produce meshes from multi-label masks. Each surface is watertight and manifold, and no manual correction of the mesh is required. A surface produced from Shabaka may be used as input to any software that accepts a surface mesh as input. As it pertains to the focus of this discussion, the surface mesh is inserted into a mesh generation tool, be it Tetgen for creating a quadratic tetrahedral mesh, or Celeris for creating a linear polyhedral mesh. The surface generation step typically takes less than 5 minutes for realistic input image masks using a 2.4 GHz Intel Core i7 processor with 16 GB RAM. In all, if the user has an image mask readily available, he or she can install Shabaka and generate a high-quality surface mesh and subsequent volume mesh in less than half an hour on a typical laptop.
-
-Shabaka has been rigorously tested against a wide variety of input images. Image masks have been meshed for the heart, brain, lungs, liver, skull, pelvis, vertebra, femur, and portions of the knee joint (see \figref{showcase}).
-
-\begin{sidewaysfigure}[htbp!]
-\centering
-\vspace{2.5mm}
-\includegraphics[width=1.0\textwidth]{media/2-shabaka/2-surf/6-showcase.png}
-\caption{Suite of example meshes generated from image data using Shabaka}
-\label{fig:showcase}
-\end{sidewaysfigure}
