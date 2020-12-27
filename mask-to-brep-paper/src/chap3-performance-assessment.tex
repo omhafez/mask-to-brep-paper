@@ -6,20 +6,56 @@ The performance of the proposed method is assessed via comparison to that of a c
 For the canonical cases, image masks are defined for each voxel ${v}$ by the following:
 \begin{align} 
 	v &=  \begin{cases}
-		1, & \text{if}\ d \left(\bm{v_c},\bm{C}\right) <= R \\
+		1, & \text{if}\ d \left(\bm{v_c},\bm{c}\right) <= r \\
 		0, & \text{otherwise}
 	\end{cases}
 \end{align}
-where $d$ is the Euclidean distance, $\bm{v_c}$ is the center of voxel $v$, $\bm{C}$ is the center of the spherical image mask, and $R$ is its radius. For these cases, the background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution. \\ \\
+where $d$ is the Euclidean distance, $\bm{v_c}$ is the center of voxel $v$, $\bm{c}$ is the center of the spherical image mask, and $r$ is its radius. For these cases, the background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution. \\ \\
 %
-In order to quantify performance, two error metrics are defined: shape error and volume error. Define and explain logic... These errors are defined in conjunction with a corresponding "perfect sphere". Every b-rep from these examples has an associated perfect sphere against which the error mismatch is measured.\\ \\
+In order to quantify performance, two error metrics are defined: shape error and volume error. Define and explain logic... These errors are defined in conjunction with a corresponding ``perfect sphere''. Every b-rep from these examples has an associated perfect sphere against which the error mismatch is measured.\\ \\
 %
 The shape and volume errors are compared between the commercial software and the proposed method as three parameters are independently varied for the canonical sphere case: 1) resulting b-rep resolution, 2) the sphere radius, and 3) the sphere center. The purpose of these comparions is to show that the proposed method perfoms comparably to a respected option, rather than specifically pointing to the supreriority of one method over the other. Standard options are chosen in the commercial to yield the best results for that approach, namely selected "Binarise before smoothing" and performing 100 iterations of smart mask smoothing. \\ \\
 %
-Figure (???) shows the shape and volume errors for the two methods as the b-rep resolution is varied for a spherical mask centered in the image with a radius $R = 80$ voxels. See Figure (???) for a visual comparison of the image mask and represetative b-reps from the commercial code and proposed method. Default parameters are used in the commercial code for b-rep with $>= 2587$ vertices. For resolutions coarser than that, the "target maximum error" was increased to allow results with $< 2587$ vertices. When comparing the shape error of the two approaches, the proposed method performs at least as well as the commercial option for very coarse meshes, and actually performs measurably better for a wide range of realistic values. The shape error of the proposed method slightly increases with resolution for extremely fine meshes, as the decimation tool pushes the final b-rep toward a shape error of about $3\%$ of the raw b-rep coming out of the Voronoi parition prior to smoothing or decimation. For the volume error, the proposed method performs better b-reps with resolution less than about 5000 vertices, and asymptotes to a comparable value toward which the commercial software converges.\\ \\
+\figref{graph1} shows the shape and volume errors for the two methods as the b-rep resolution is varied for a spherical mask centered in the image with a radius $R = 80$ voxels. See~\figref{demos1} for a visual comparison of the image mask and represetative b-reps from the commercial code and proposed method. Default parameters are used in the commercial code for b-rep for number of vertices  $n >= 2587$. For resolutions coarser than that, the "target maximum error" was increased to allow results with $n < 2587$. When comparing the shape error of the two approaches, the proposed method performs at least as well as the commercial option for very coarse meshes, and actually performs measurably better for a wide range of realistic values. The shape error of the proposed method slightly increases with resolution for extremely fine meshes, as the decimation tool pushes the final b-rep toward a shape error of about $3\%$ of the raw b-rep coming out of the Voronoi parition prior to smoothing or decimation. For the volume error, the proposed method performs better b-reps with resolution less than about 5000 vertices, and asymptotes to a comparable value toward which the commercial software converges.\\ \\
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.25]{media/7-performance/1-graph-1.pdf}
+	\caption{Comparison of shape error (left) and volume error (right) between commercial software and proposed method as b-rep resolution is varied.}
+	\label{fig:graph1}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.25]{media/7-performance/3-demos-4.pdf}
+	\caption{Image masks (green) and corresponding b-reps for commercial software (red) and proposed method (blue) for selected b-rep resolutions.}
+	\label{fig:demos1}
+\end{figure}
 %
-Figure (???) shows the error metrics when the resulting b-rep resolution is kept fixed at n = 10428 vertices, while the radius of the spherical image mask if varied from 40 to 120 voxels. The spheres are once again always centered in the image. See Figure (???) for representative examples of the image mask and resulting b-reps from the two methods. One can think of the sphere radius as an inverse measure of the curvature of the image mask. Larger radii correspond to smoother surfaces, whereas smaller radii correspond to regions of where surfaces are changing more rapidly. The proposed method has about a 2x faster convergence rate for both shape and volume erorrs compared to the commercial approach, albeit with larger coefficients in both cases. As expected, the proposed algorithm performs best for slowly-changing surfaces.
+\figref{graph2}) shows the error metrics when the resulting b-rep resolution is kept fixed at $n = 10428$ vertices, while the radius of the spherical image mask if varied from 40 to 120 voxels. The spheres are once again always centered in the image. See~\figref{demos2} for representative examples of the image mask and resulting b-reps from the two methods. One can think of the sphere radius as an inverse measure of the curvature of the image mask. Larger radii correspond to smoother surfaces, whereas smaller radii correspond to regions of where surfaces are changing more rapidly. The proposed method has about a 2x faster convergence rate for both shape and volume erorrs compared to the commercial approach, albeit with larger coefficients in both cases. As expected, the proposed algorithm performs best for slowly-changing surfaces.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.25]{media/7-performance/1-graph-2.pdf}
+	\caption{Comparison of shape error (left) and volume error (right) between commercial software and proposed method as radius of sphere in image mask is varied.}
+	\label{fig:graph2}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.25]{media/7-performance/3-demos-5.pdf}
+	\caption{Image masks (green) and corresponding b-reps for commercial software (red) and proposed method (blue) for selected sphere radii.}
+	\label{fig:demos2}
+\end{figure}
 %
-Finally, the two methods are compared for the cases where a sphere of $R = 80$ voxels is translated along a unit direction defined by the vector $\bm{i}  + 2\bm{j} + 3\bm{k}$. All resulting b-reps are tuned again to have a fixed resolution of n = 10428 vertices. The intent of this variation to test the sensitivity of the methods to the location of object within the image itself. Ideally the b-reps should be consistently accurate regardless of where the object is located, and indeed both methods show very low sensitivity to the translation of the object within the image, as shown in Figure (???). \\ \\
+Finally, the two methods are compared for the cases where a sphere of $R = 80$ voxels is translated along a unit direction defined by the vector $\bm{i}  + 2\bm{j} + 3\bm{k}$. All resulting b-reps are tuned again to have a fixed resolution of n = 10428 vertices. The intent of this variation to test the sensitivity of the methods to the location of object within the image itself. Ideally the b-reps should be consistently accurate regardless of where the object is located, and indeed both methods show very low sensitivity to the translation of the object within the image, as shown in~\figref{graph3}. \\ \\
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.25]{media/7-performance/2-graph-3.pdf}
+	\caption{Comparison of shape error (left) and volume error (right) between commercial software and proposed method as center of sphere in image mask is translated.}
+	\label{fig:graph3}
+\end{figure}
 %
-Qualitative comparisons are made for a number of real image examples). Images were segmented in Seg3D~\cite{Seg3D}. The resulting binary image masks were used as input to the two methods. B-rep resolutions were matched in all cases. See Figure (???) for a comparison of image mask and resulting b-reps for a suite of examples. The proposed method perfoms comparably to the commercial approach in all cases, performing slighly better at smoothing surfaces and not quite as well for regions with high curvature. All examples completed for the proposed method on a 16 GB RAM laptop in less than 5 minutes.
+Qualitative comparisons are made for a number of real image examples). Images were segmented in Seg3D~\cite{Seg3D}. The resulting binary image masks were used as input to the two methods. B-rep resolutions were matched in all cases. See~\figref{example-meshes} for a comparison of image mask and resulting b-reps for a suite of examples. The proposed method perfoms comparably to the commercial approach in all cases, performing slighly better at smoothing surfaces and not quite as well for regions with high curvature. All examples completed for the proposed method on a 16 GB RAM laptop in less than 5 minutes.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.08]{media/7-performance/4-examples.pdf}
+	\caption{Image masks (green) and corresponding b-reps for commercial software (red) and proposed method (blue) for various examples from MRI and CT. From top to botttom: brain~\cite{marcus_2007}, heart~\cite{winslow_2012}, lungs~\cite{rikxoort_2009}, distal femur~\cite{epperson_2013}, skull~\cite{clark_2013}, L5 lumbar~\cite{yao_2016}, pelvis~\cite{clark_2013}, upper left second molar (author's), liver~\cite{bilic_2019}, and example image with disjoint objects in image mask.}
+	\label{fig:example-meshes}
+\end{figure}
