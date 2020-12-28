@@ -6,13 +6,26 @@ The performance of the proposed method is assessed via comparison to that of a c
 For the canonical cases, image masks are defined for each voxel ${v}$ by the following:
 \begin{align} 
 	v &=  \begin{cases}
-		1, & \text{if}\ d \left(\bm{v_c},\bm{c}\right) <= r \\
+		1, & \text{if}\ d \left(\bm{v_C},\bm{C}\right) <= R \\
 		0, & \text{otherwise}
 	\end{cases}
 \end{align}
-where $d$ is the Euclidean distance, $\bm{v_c}$ is the center of voxel $v$, $\bm{c}$ is the center of the spherical image mask, and $r$ is its radius. For these cases, the background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution. \\ \\
+where $d$ is the Euclidean distance, $\bm{v_C}$ is the center of voxel $v$, $\bm{C}$ is the center of the spherical image mask, and $R$ is its radius. For these cases, the background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution. \\ \\
 %
-In order to quantify performance, two error metrics are defined: shape error and volume error. Define and explain logic... These errors are defined in conjunction with a corresponding ``perfect sphere''. Every b-rep from these examples has an associated perfect sphere against which the error mismatch is measured.\\ \\
+In order to quantify performance, two error metrics are defined: shape error and volume error. These errors are defined in conjunction with a corresponding ``perfect sphere''. Every b-rep from these examples has an associated perfect sphere against which the error mismatch is measured. Built into these error metrics are two sources of error: the error of approximating the perfect sphere with a binary image mask, and the error of attempting to reconstruct the binary image mask with a b-rep. We will assume that the \textit{image-based accuracy}, as \cite{young_2008} refer to it, is negligible and focus on the ability of the method to ``converge to geometry''.\\ \\
+%
+The shape error measures the surface deviation of the resultant b-rep from the perfect sphere it is attempting to reconstruct. Each facet of the resulting b-rep is projected onto the underlying sphere. The normal of each facet is compared to the normal of the underlying sphere at the centroid of the projected facet via the magnitude of their cross product. A weighted sum is performed to integrate the area over the entire b-rep, and finally the sum is normalized by the surface area of the b-rep to provide a range of values of $\left[0,1\right]$. Thus, the shape error $e_s$ is defined as:
+\begin{equation} 
+	e_s = \frac{1}{A} \sum \limits_{f\in\mathcal{F}} \lVert {\bf n}_f \times {\bf n}_s \rVert
+\end{equation}
+where $A$ is the surface area of the b-rep, $f$ is a facet on the b-rep belonging to the set of all b-rep facets $\mathcal{F}$, ${\bm n}_f$ is the normal of facet $f$, and ${\bm n}_s$ is the normal of the associated sphere at the centroid of the projected facet $f$ onto the sphere. \\ \\
+%
+The volume error measures the unsigned difference in volume between the b-rep and associated perfect sphere it is meant to reconstruct. If we define the facet surface of facet $f$ as $\gamma_f$,  ${\bm x} \in \gamma_f$, $r = \lVert {\bm x} \rVert$, $d\alpha$ as an area element on the sphere of the projected b-rep facet, and again $R$ as the radius of the underlying perfect sphere, we define a normalized volume error $e_v$ as:
+\begin{equation}
+	e_v = \frac{1}{4\pi R^2} \Big[\sum \limits_{f \in \mathcal{F}\textsl{}} \int \limits_{\gamma_f} (r - R)^2 d\alpha \Big]^{1/2}
+\end{equation}
+Each b-rep facet is projected onto the underlying perfect sphere. Integrals are performed numerically on the projected facet. Six quadrature points were found to provide sufficent accuracy. Finally the quantity is normalized by the surface area of the underlying perfect sphere. SHOULD WE GO INTO MORE DETAIL IN EXPLAINING SHAPE AND VOLUME ERRORS? 
+\\ \\
 %
 The shape and volume errors are compared between the commercial software and the proposed method as three parameters are independently varied for the canonical sphere case: 1) resulting b-rep resolution, 2) the sphere radius, and 3) the sphere center. The purpose of these comparions is to show that the proposed method perfoms comparably to a respected option, rather than specifically pointing to the supreriority of one method over the other. Standard options are chosen in the commercial to yield the best results for that approach, namely selected "Binarise before smoothing" and performing 100 iterations of smart mask smoothing. \\ \\
 %
