@@ -1,18 +1,18 @@
 \section{Performance Assessment}
 %
 
-The performance of the proposed method is assessed by comparing its results to those of a state-of-the-art software package. Performance is measured quantitatively for canonical image masks defined by spheres of various radii and locations and qualitatively for a variety of examples from real MRI and CT scans. \\ \\
+The performance of the proposed method is assessed by comparing its results to those of a commercially-available state-of-the-art software package. Performance is measured quantitatively for canonical image masks defined by spheres of various radii and locations, and qualitatively with a variety of real MRI and CT scans. \\ \\
 %
-For the canonical cases, image masks are defined for each voxel ${v}$ by the following:
+We pursue a quantitative understanding of the performance of our method by considering a sphere of radius $R$ and center $\bm{C}$.  An image mask is defined by assigning a bit $v$ to the voxel with center at $\bm{v}$ as
 \begin{align} 
 	v &=  \begin{cases}
-		1, & \text{if}\ d \left(\bm{v_C},\bm{C}\right) \le R \\
+		1, & \text{if}\ d \left(\bm{v},\bm{C}\right) \le R \\
 		0, & \text{otherwise}
 	\end{cases}
 \end{align}
-where $d$ is the Euclidean distance, $\bm{v_C}$ is the center of voxel $v$, $\bm{C}$ is the center of the spherical image mask, and $R$ is its radius. The background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution. \\ \\
+where $d(\cdot,\cdot)$ is the Euclidean distance. The background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution. \\ \\
 %
-In order to quantify performance, two error metrics are defined: a shape error and a volume error. These errors are defined in conjunction with a corresponding ``perfect sphere''. Each b-rep from these examples has an associated perfect sphere we are approximating, against which the error mismatches are measured. These metrics have two sources of error, as described by Young \textit{et al.}~\cite{young_2008}: 1) the error of approximating the perfect sphere with a binary image mask, or the \textit{image-based error}, and 2) the error of attempting to reconstruct the binary image mask with a b-rep, or the method's ability to \textit{converge to geometry}. The image mask defined above of course does not yield perfect image-based accuracy, but for these purposes, we will assume that the image-based error is negligible and will focus on the ability of the method to converge to geometry.\\ \\
+In order to quantify performance, two error metrics are defined: a {\em shape error} and a {\em volume error}. These metrics characterize the departure of the b-rep from the perfect sphere.  There are two sources of error present \cite{young_2008}: 1) approximation of the perfect sphere with a binary image mask, or the {\em image-based error}; and 2) reconstruction of the binary image mask with a facetized b-rep.  The latter can be thought of as controlling a method's ability to {\em converge to geometry}. The image mask defined above does not, of course, yield perfect image-based accuracy, but for these purposes, we will assume that the image-based error is negligible and will focus on the ability of the method to converge to geometry.\\ \\
 %
 The shape error measures the surface deviation of the resultant b-rep from the perfect sphere it is meant to reconstruct. Each facet of the resulting b-rep is projected onto the underlying sphere. The normal of each facet is compared to the normal of the underlying sphere at the centroid of the projected facet by computing the magnitude of their cross product. A weighted sum is performed as a means to integrate over the area of the b-rep, and finally the sum is normalized by the surface area of the b-rep to provide a range of values from 0 to 1, inclusive. Thus, the shape error $e_s$ is defined as:
 \begin{equation} 
