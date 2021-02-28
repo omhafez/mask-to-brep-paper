@@ -34,6 +34,9 @@
     \thispagestyle{empty}%
     \addtocounter{page}{-1}%
     \newpage}
+\usepackage{caption}
+\captionsetup[figure]{labelfont={bf},name={Fig.},labelsep=period}
+\captionsetup[table]{labelfont={bf},name={Table},labelsep=period}
 \usepackage[english]{babel}
 \usepackage{csquotes}
 \usepackage[backend=biber]{biblatex}
@@ -49,7 +52,7 @@
 
 \newcommand*{\figref}[2][]{%
   \hyperref[{fig:#2}]{%
-    {Figure~\ref*{fig:#2}}%
+    {Fig.~\ref*{fig:#2}}%
     \ifx\\#1\\%
     \else
       \,#1%
