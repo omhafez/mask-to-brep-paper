@@ -183,11 +183,11 @@
 
 \vspace{1cm}
 \begin{center} 
-	{\bf\large Omar Hafez}{$^{1,2}$}{\bf\large, Mark Rashid}{$^1$}\\
+	{\bf\large Omar Hafez}{\bf\large, Mark Rashid}\\
 	
 	%\vspace{5mm}
-	{\footnotesize $^{1}$ Department of Civil \& Environmental Engineering, University of California, Davis}\\
-{\footnotesize $^{2}$ Financial support from DOE CSGF grant DE-FG02-97ER25308 is gratefully acknowledged}\end{center}
+	{Department of Civil \& Environmental Engineering, University of California, Davis}\\
+\end{center}
 
 \vspace{1cm}
 \abstract{\noindent A novel approach to generating surface meshes from image masks of MRI or CT scans is presented. Provided that the image has been segmented into a binary image mask, the method samples the image mask and locally approximates the material boundary. The approximation is performed by minimizing geometric error metrics between the voxelated boundary and an approximating template surface. Boundary points and normals are generated based on each local surface approximation. Voronoi partitioning is employed to perform surface reconstruction on the resulting oriented point cloud. Namely, Voronoi sites are placed on either side of each point along its orientation, Voronoi partitioning is performed, and finally facets that share Voronoi sites of differing material ID are extracted. The Voronoi approach guarantees watertight and manifold properties of the resulting boundary. The method is shown to perform competitively compared to commercial software, both in honoring shape and volume metrics of an underlying canonical image mask, as well as in a qualitative comparison for a variety of examples from real MRI and CT scans. The approach has proven to provide robust, high-quality data that may be inserted into an image-based meshing pipeline for the purposes of physics-based simulation, 3D printing, or visualization applications. The framework also allows for future introduction of additional interface templates that may accurately capture sharp edges and corners, high-curvature regions, and multi-material interfaces.} \\ \\
@@ -206,6 +206,7 @@
 \include{chap2-algorithm}
 \include{chap3-performance-assessment}
 \include{chap4-closure}
+\include{chap5-acknowledgments}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
