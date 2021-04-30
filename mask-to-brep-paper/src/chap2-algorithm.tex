@@ -68,46 +68,40 @@ A window $\mathcal{W}$ is marked for further processing if it satisfies a thresh
 
 Given a window $\mathcal{W}$ that is marked as intersecting the body boundary, we seek to derive a local boundary-surface patch $\mc{S}$ that optimally represents the boundary separating $\mc{M}$ and $\mc{W} \setminus \mc{M}$.  The overall plan is as follows: we define geometrically smooth (i.e., not voxelated), disjoint, simply-connected regions that approximate $\mc{W}$ and $\mc{M}$, whose common boundary serves to define the surface patch $\mc{S}$.  The regions and the surface $\mc{S}$ are taken to have simple, parameterizable shapes; optimally fitting them to $\mc{W}$ and $\mc{M}$ therefore reduces to a small algebraic minimization problem.  We require that $\mc{S}$ be non-self-intersecting, and that it divides the smooth approximation to $\mc{W}$ into exactly two subregions. \\ \\
 %
-Proceeding in this direction, let $\mc{D}$ be a sphere whose center and radius $R$ are chosen so that the centroid and volume of $D$ match those of $\mc{W}$.  Next, we define $\Omega_p$ as the spatial region occupied by $\mc{M}$, and $\Omega$ as the subset of $\mc{D}$ that lies on the material side of $\mc{S}$.  We assume that $\mc{S}$ intersects $\partial \mc{D}$ in a simple closed loop, so that $\Omega$ is a simply-connected subset of $\mc{D}$ that resembles a ``lens.''  The situation is illustrated in~\figref{figure3}. \\ \\
-%
-It remains to provide a concrete parameterization of $\mc{S}$, and a specific objective function through which $\Omega$ is optimally fitted to $\Omega_p$.  To these ends, in this initial exposition we take $\mc{S}$ to be a plane, as shown in \figref{quad}. Next, we define an objective function via the zeroth, first, and second polynomial moments of $\Omega_p$ and $\Omega$: 
+Proceeding in this direction, let $\mc{D}$ be a sphere whose center and radius $R$ are chosen such that the centroid and volume of $D$ match those of $\mc{W}$.  Next, we define $\Omega_p$ as the spatial region occupied by $\mc{M}$, and $\Omega$ as the subset of $\mc{D}$ that lies on the material side of $\mc{S}$.  We assume that $\mc{S}$ intersects $\partial \mc{D}$ in a simple closed loop, so that $\Omega$ is a simply connected subset of $\mc{D}$ that resembles a lens. The situation is illustrated in~\figref{figure3}. \\
+
+\begin{figure}[b!]
+	\centering
+	\subfigure[Window $\mathcal{W}$]{%
+		\includegraphics[scale=0.72]{media/om/dem2.pdf}
+		\label{fig:subfigure2}}
+	\subfigure[Approximating sphere $\mathcal{D}$]{%
+		\includegraphics[scale=0.72]{media/om/dem3.pdf}
+		\label{fig:subfigure3}}
+	
+	\subfigure[Approximating surface $\mathcal{S}$]{%
+		\includegraphics[scale=0.72]{media/om/dem4.pdf}
+		\label{fig:subfigure4}}
+	\subfigure[Voxelated region $\Omega_p$]{%
+		\includegraphics[scale=0.72]{media/om/omp.pdf}
+		\label{fig:subfigure5}}
+	\subfigure[Approximating lens $\Omega$]{%
+		\includegraphics[scale=0.72]{media/om/om.pdf}
+		\label{fig:subfigure6}}
+	
+	\caption{Boundary approximation demonstrated in 2D.}
+	\label{fig:figure3}
+\end{figure}
+
+It remains to provide a concrete parameterization of $\mc{S}$, and a specific objective function through which $\Omega$ is optimally fitted to $\Omega_p$.  To these ends, in this initial exposition we take $\mc{S}$ to be a plane, as shown in \figref{quad}. We next define an objective function via the zeroth, first, and second polynomial moments of $\Omega_p$ and $\Omega$: 
 \begin{alignat}{5}
 &{} &&V^p = \int_{\Omega_p}dv, &&{} \\
 I_{x\phantom{z}}^p &= \int_{\Omega_p}xdv, &&I_{y\phantom{z}}^p = \int_{\Omega_p}ydv, &&I_{z\phantom{z}}^p = \int_{\Omega_p}zdv, \\
 I^p_{xy} &= \int_{\Omega_p}xydv, &&I^p_{xz} = \int_{\Omega_p}xzdv, &&I^p_{yz} = \int_{\Omega_p}yzdv, \\
 I^p_{xx} &= \int_{\Omega_p}(y^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{yy} = \int_{\Omega_p}(x^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{zz} = \int_{\Omega_p}(x^2 + y^2)dv.
 \end{alignat}
-Analogous quantities $V$, $I_x$, etc. are defined for $\Omega$.  Placing the coordinate origin at the common centroid of $\mc{W}$ and $\mc{D}$, the planar surface $\mc{S}$ is defined by $x' = d$, where the primed coordinates are oriented such that the $x'$ axis is normal to $\mc{S}$, as shown in \figref{quad}.  In three dimensions, the transformation matrix between primed and unprimed Cartesian frames is given in terms of the polar angles $\psi, \theta$ by:
-\begin{gather}
-\bm{R} = \left[\begin{array} {ccc} {\cos\psi\cos\theta} & {-\sin\psi} & {\cos\psi\sin\theta}\\ {\sin\psi\cos\theta} & {\cos\psi} & {\sin\psi\sin\theta}, \\
-{-\sin\theta} & {0} & {\cos\theta}\end{array} \right].
-\end{gather}
-
-
-\begin{figure}[ht]
-\centering
-\subfigure[Window $\mathcal{W}$]{%
-		\includegraphics[scale=0.72]{media/om/dem2.pdf}
-\label{fig:subfigure2}}
-\subfigure[Approximating sphere $\mathcal{D}$]{%
-		\includegraphics[scale=0.72]{media/om/dem3.pdf}
-\label{fig:subfigure3}}
-
-\subfigure[Approximating surface $\mathcal{S}$]{%
-		\includegraphics[scale=0.72]{media/om/dem4.pdf}
-\label{fig:subfigure4}}
-\subfigure[Voxelated region $\Omega_p$]{%
-		\includegraphics[scale=0.72]{media/om/omp.pdf}
-\label{fig:subfigure5}}
-\subfigure[Approximating lens $\Omega$]{%
-		\includegraphics[scale=0.72]{media/om/om.pdf}
-\label{fig:subfigure6}}
-
-\caption{Boundary approximation demonstrated in 2D.}
-\label{fig:figure3}
-\end{figure}
-
-\begin{figure}[h]
+Analogous quantities $V$, $I_x$, etc. are defined for $\Omega$.  Placing the coordinate origin at the common centroid of $\mc{W}$ and $\mc{D}$, the planar surface $\mc{S}$ is defined by $x' = d$, where the primed coordinates are oriented such that the $x'$ axis is normal to $\mc{S}$, as shown in \figref{quad}.\\ \\
+\begin{figure}[t!]
 	\centering
 		\includegraphics[scale=0.3]{media/om/window.pdf}
 	\caption{Plane boundary approximation demonstrated in 2D.}
@@ -171,13 +165,13 @@ The moments of volume are then transformed back to the original global coordinat
 \end{gather}
 \noindent With all relevant quantities in place, the \textit{subplex search method}~\cite{rowan} is used to minimize the error function using an implementation in the package \textit{NLopt}~\cite{nlo}. The method is a \textit{derivative-free} method that is well-suited for optimizing objective functions that are noisy or discontinuous. It was selected as the optimization approach due to the existence of square roots in the objective function, and the fact that robustness to a wide range of inputs was the highest priority in developing the algorithm. \\ \\
 %
-Convergence is assumed to be achieved when $\left| \mathcal{F}_{k+1} - \mathcal{F}_{k}\right| < \varepsilon$ on successive iterations, where $k$ is the iteration number and  $\varepsilon$ is the convergence tolerance. For the specific examples and algorithm parameters discussed later in this section, convergence is achieved for each boundary approximation after typically hundreds of iterations. This large value may be due to the admittedly tight tolerance value for $\varepsilon$ of $10^{-14}$, to nonlinearities or saddle points in the error function, or to inefficiencies in the nonlinear optimization tool used. However, the algorithm generates high-quality results, and the entire process usually completes in less than one minute of wall clock time on a personal computer even for complex geometries, so convergence rate was not further explored as a means of improving the algorithm. \\ \\
+Convergence is assumed to be achieved when $\left| \mathcal{F}_{k+1} - \mathcal{F}_{k}\right| < \varepsilon$ on successive iterations, where $k$ is the iteration number and  $\varepsilon$ is the convergence tolerance. For the specific examples and algorithm parameters discussed later in this section, convergence is achieved for each boundary approximation after typically hundreds of iterations. This large value may be due to the admittedly tight tolerance for $\varepsilon$ of $10^{-14}$, to nonlinearities or saddle points in the error function, or to inefficiencies in the nonlinear optimization tool used. However, the algorithm generates high-quality results, and the process for alll windows usually completes in less than one minute of wall clock time on a personal computer even for complex geometries, so convergence rate was not further explored as a means of improving the algorithm. \\ \\
 %
 Finally, we require that once convergence has been satisfied, the criterion $\mathcal{F} < \overline{\mathcal{F}}$ must also be met for the point and normal to be retained. In this way, when $\Omega$ unsatisfactorily approximates $\Omega_p$, the associated point and normal are discarded. This typically occurs in regions of high curvature, where a plane does not approximate the boundary well. The point cloud is dense enough that simply discarding these outlier points does not cause any discernible amount of under-sampling of the surface. \\ \\
 %
 The solution to the minimization problem yields the values $d$, $\psi$, and $\theta$ that determine the optimal surface $\mathcal{S}$, from which the boundary point and normal are defined. \tabref{surface} can be consulted for a complete summary of variables used in the local approximation of the boundary.
 
-\begin{table}[]
+\begin{table}[t!]
  \centering
    \begin{tabular}{|c||c|}
    \hline
@@ -225,11 +219,11 @@ Once the parameters $d$, $\psi$, and $\theta$ are selected for a particular wind
 
 Surface reconstruction is the process of generating closed, manifold, polygonized surfaces from point clouds. Approaches found in the existing literature typically assume a dense, noisy population of points that are, e.g., generated by laser-based scanners. Though the proposed algorithm departs from these assumptions to a degree, a brief review of surface reconstruction techniques is still worthwhile. \\ \\
 %
-Among the most well-known surface reconstruction algorithms are the \textit{Power Crust} and \textit{Poisson surface reconstruction} techniques. Amenta \textit{et al.}~\cite{amenta_2001} presented the \textit{Power Crust} algorithm for reconstructing watertight surfaces from unoriented point clouds. It first constructs the \textit{medial axis transform} from the point cloud, which consists of the set of maximal balls completely contained in the interior of the surface. The algorithm then applies an inverse transform to approximate the medial axis and produce a piecewise-linear surface. The algorithm does not perform well when the point set is not sufficiently dense. Kazhdan \textit{et al.} presented \textit{Poisson surface reconstruction}~\cite{kazhdan_2008} and subsequently \textit{screened Poisson surface reconstruction}~\cite{kazhdan_2013} for oriented point clouds. They compute an indicator function defined as 1 for points inside the surface and 0 for points outside, whose gradient approximates the vector field defined by the oriented point cloud. This amounts to solving a Poisson problem for an implicit indicator function, followed by application of marching cubes to polygonize the surface. The \textit{screened} approach provides a soft constraint that encourages the reconstructed isosurface to pass through the input points. In practice, the screened approach is significantly more robust than the original Poisson approach in generating manifold surfaces from complex point clouds. The technique produces smooth surfaces that exhibit resiliency to noise, outliers, and under-sampling that makes it perhaps the best available method in many cases. \\ \\
+Among the most well-known surface reconstruction algorithms are the \textit{Power Crust} and \textit{Poisson surface reconstruction} techniques. Amenta \textit{et al.}~\cite{amenta_2001} presented the \textit{Power Crust} algorithm for reconstructing watertight surfaces from unoriented point clouds. It first constructs the \textit{medial axis transform} from the point cloud, which consists of the set of maximal balls completely contained in the interior of the surface. The algorithm then applies an inverse transform to approximate the medial axis and produce a piecewise-linear surface. The algorithm does not perform well when the point set is not sufficiently dense. Kazhdan \textit{et al.} presented \textit{Poisson surface reconstruction}~\cite{kazhdan_2008} and subsequently \textit{screened Poisson surface reconstruction}~\cite{kazhdan_2013} for oriented point clouds. They compute an indicator function defined as 1 for points inside the surface and 0 for points outside, whose gradient approximates the vector field defined by the oriented point cloud. This amounts to solving a Poisson problem for an implicit indicator function, followed by application of marching cubes to polygonize the surface. The \textit{screened} approach provides a soft constraint that encourages the reconstructed isosurface to pass through the input points. In practice, the screened approach is more robust than the original Poisson approach in generating manifold surfaces from complex point clouds. The technique produces smooth surfaces that exhibit resiliency to noise, outliers, and under-sampling that makes it perhaps the best available method in many cases. \\ \\
 %
-Many other surface reconstruction approaches exist, including those making use of moving least squares, Delaunay and Voronoi constructions, and variational approaches~\cite{berger}. A novel Voronoi-based approach is presented here as an alternative to these approaches that is tuned to address the type of noise and point density expected from point clouds generated by the method described above. \\ \\
+Many other surface reconstruction approaches exist, including those making use of moving least squares, Delaunay and Voronoi constructions, and variational approaches~\cite{berger}. A novel Voronoi-based approach is presented here as an alternative to these approaches, that is tuned to address the type of noise and point density expected from the point-cloud-generation step. \\ \\
 %
-The proposed surface reconstruction technique relies on constructing a \textit{Voronoi diagram}, which for our purposes is a nearest neighbor partitioning of $\mathbb{R}^3$ based on a set of input \textit{Voronoi sites}. The desired output from a Voronoi partition is a mesh -- namely, a set of points, edges, facets, and cells (and their connectivities) that discretize space. We first define the half-space $D(\bm{p},\bm{q})$, comprising all points $\bm{x}$ as close, or closer, to site $\bm{p}$ than to site $\bm{q}$, as:
+The proposed surface reconstruction technique relies on constructing a \textit{Voronoi diagram}, which for our purposes is a nearest neighbor partitioning of $\mathbb{R}^3$ based on a set of input \textit{Voronoi sites}. The desired output from a Voronoi partition is a mesh -- namely, a set of points, edges, facets, and cells (and their connectivities) that discretize space. We first define the half-space $D(\bm{p},\bm{q})$, comprising all points $\bm{x}$ as close, or closer, to site $\bm{p}$ than to site $\bm{q}$:
 \begin{equation}
 D(\bm{p},\bm{q}) = \{\bm{x} \mid d(\bm{p},\bm{x}) \leq d(\bm{q},\bm{x})\},
 \end{equation}
@@ -249,7 +243,7 @@ The proposed technique involves the following steps, to be described in turn:
 
 \subsubsection{Voronoi Site Generation and Voronoi Partitioning}
 
-Given the location of a boundary point $\bm{x}_p$ and orientation of its corresponding normal $\bm{n}$, two Voronoi sites are placed on either side of the point along the normal, as shown in~\figref{vor4} and~\figref{d2dvor3}. They are separated from the point by a distance $b$; i.e., their locations are $\bm{x}_p \pm b \bm{n}$. The two Voronoi sites are assigned material types. For the two-material case considered here, the site corresponding to the position $\bm{x}_p - b\bm{n}$ is inside $\Omega$, and thus is assigned to the material of interest. The site corresponding to the position $\bm{x}_p + b\bm{n}$ is designated as void material. \textit{Voronoi partitioning} is performed using an implementation from \textit{Qhull}~\cite{barber_1996} that is robust even for near-degenerate Voronoi site locations. The sequence of point cloud generation, Voronoi site placement, and Voronoi partitioning is illustrated in~\figref{d2dvor}.
+Given the location of a boundary point $\bm{x}_p$ and orientation of its corresponding normal $\bm{n}$, two Voronoi sites are placed on either side of the point along the normal, as shown in~\figref{vor4} and~\figref{d2dvor3}. They are separated from the point by a distance $b$; hence, their locations are $\bm{x}_p \pm b \bm{n}$. The two Voronoi sites are assigned material types. For the two-material case considered here, the site corresponding to the position $\bm{x}_p - b\bm{n}$ is inside $\Omega$, and thus is assigned to the material of interest. The site corresponding to the position $\bm{x}_p + b\bm{n}$ is designated as void material. Voronoi partitioning is performed using an implementation from \textit{Qhull}~\cite{barber_1996} that is robust even for near-degenerate Voronoi site locations. The sequence of point cloud generation, Voronoi site placement, and Voronoi partitioning is illustrated in~\figref{d2dvor}.
 
 \begin{figure}[htbp!]
 \centering
@@ -266,7 +260,7 @@ Given the location of a boundary point $\bm{x}_p$ and orientation of its corresp
 %		\includegraphics[scale=0.4]{media/vv/a4.png}
 %\label{fig:d2dvor4}}
 %
-\caption{(a) Segmented image of 2D slice of \textit{ex vivo} canine heart (image mask generated from MRI data from Cardiovascular Research Grid~\cite{cvgg}), (b) resulting point cloud, and (c) Voronoi site placement and subsequent Voronoi partitioning and surface extraction. Point cloud and Voronoi sites are coarser than is optimal for illustration purposes.}
+\caption{(a) Segmented image of 2D slice of \textit{ex vivo} canine heart (image mask generated from MRI data from Cardiovascular Research Grid~\cite{cvgg}), (b) resulting point cloud, and (c) Voronoi site placement and subsequent Voronoi partitioning and surface extraction. Point cloud and Voronoi sites are coarser than is typical for illustration purposes.}
 \label{fig:d2dvor}
 \end{figure}
 
@@ -274,9 +268,9 @@ Given the location of a boundary point $\bm{x}_p$ and orientation of its corresp
 
 The b-rep is extracted from the Voronoi partition as the set of facets that share Voronoi sites of differing material type. An additional step is performed, however, to mitigate undesired ``cross-talk'' facets caused by Voronoi partitioning of neighboring site pairs. ``Good facets'' are identified as those facets whose Voronoi sites belong to a site pair originating from the same point and normal, while ``bad facets'' are those facets whose Voronoi sites originate from two different points in the point cloud. For surfaces with small curvature, the total area of the good facets is vastly greater that of the bad facets. Nonetheless, the existence of bad facets causes a stair-stepping feature in the resulting surface that is undesirable. \\ \\
 %
-These artifacts are addressed as follows: ``bad edges'' are identified as those edges that share two bad facets. Networks of connected bad edges are identified, and each network is collapsed to a point (see \figref{cross1}). For surfaces with a small amount of curvature, no bad edges are connected, and thus each is independently collapsed. Any good facet that is connected to a network of bad edges is modified to connect to the new collapsed point. Good facets are subsequently triangulated to maintain planarity following the collapse of bad edges. This increases the data required to define the surface mesh, but the decimation step described in the next section resolves this issue immediately. The sequence is demonstrated for an \textit{ex vivo} heart example in~\figref{cross2}. \\
+These artifacts are addressed as follows: ``bad edges'' are identified as those edges that share two bad facets. Networks of connected bad edges are identified, and each network is collapsed to a point (see \figref{cross1}). For surfaces with a small amount of curvature, no bad edges are connected, and thus each is independently collapsed. Any good facet that is connected to a network of bad edges is modified to connect to the new collapsed point. Good facets are subsequently triangulated to maintain planarity following the collapse of bad edges. The sequence is demonstrated for an \textit{ex vivo} heart example in~\figref{cross2}. \\
 
-\begin{figure}[htbp!]
+\begin{figure}[b!]
 \centering
 \subfigure[]{%
 		\includegraphics[scale=0.09]{media/2-shabaka/3-clean-zoom/1-init-zoom.png}
@@ -295,7 +289,7 @@ These artifacts are addressed as follows: ``bad edges'' are identified as those 
 \label{fig:cross1}
 \end{figure}
 
-\begin{figure}[htbp!]
+\begin{figure}[b!]
 \centering
 \subfigure[]{%
 		\includegraphics[scale=0.08]{media/2-shabaka/4-clean/1-init.png}
@@ -315,7 +309,7 @@ These artifacts are addressed as follows: ``bad edges'' are identified as those 
 \end{figure}
 \noindent For the vast majority of ``bad-edge'' networks, the collapsing technique results in a smoother surface that remains closed and manifold. For regions of high curvature, there are rare cases in which the cleanup step may cause the surface to become non-manifold. Accordingly, the topology of particular bad-edge networks that cause this phenomenon are not collapsed in order to preserve the manifold property. The current approach is thus unable to alleviate the issue of ``cross-talk'' facets in regions of high curvature. Fortunately, these remaining artifacts are small enough that the ensuing decimation step removes them. \\ \\
 %
-Regions of high curvature or even sharp corners and edges can be addressed via an enhancement of the point-cloud-generation algorithm described above. The enhancement involves including additional templates in when locally approximating boundaries, such that more than two Voronoi sites are generated for each sampling window. For example, three Voronoi sites can be used to produce an edge, and four sites can be used to produce a corner. In this manner, multiple boundary point/normal pairs for a single sampling window would naturally occur to reconstruct regions of high curvature.
+Regions of high curvature or even sharp corners and edges can be addressed via an enhancement of the point-cloud-generation algorithm described above. The enhancement involves including additional templates when locally approximating boundaries, such that more than two Voronoi sites are generated for each sampling window. For example, three Voronoi sites can be used to produce an edge, and four sites can be used to produce a corner. In this manner, multiple boundary point/normal pairs for a single sampling window would naturally occur to reconstruct regions of high curvature.
 
 \subsubsection{Surface Decimation and Smoothing}
 
@@ -333,7 +327,7 @@ Results of the entire surface generation procedure are shown in~\figref{shabakas
    $R_{\mathcal{W}}$ & window radius (in voxels) & 5 \\ \hline
    $d_{\mathcal{W}}$ & sampling distance between adjacent windows (in voxels) & 2 \\ \hline
    \multirow{2}{*}{$\overline{k}_{\mathcal{M}}$ \rule{0mm}{4mm}} & threshold for acceptable ratio of voxels in & \multirow{2}{*}{0.925} \\
-   {} & window $\mathcal{W}$ belonging to material $m$ & {} \\ \hline
+   {} & window $\mathcal{W}$ belonging to material of interest & {} \\ \hline
    $\beta_0$ & weighting coefficient for error in zeroth polynomial moment & 0.5 \\ \hline
    $\beta_1$ & weighting coefficient for error in first polynomial moments & 0.3 \\ \hline   
    $\varepsilon$ & tolerance for minimization of function $\mathcal{F}$ & $10^{-14}$ \rule{0mm}{4mm} \\ \hline
