@@ -40,7 +40,9 @@
 \captionsetup[table]{labelfont={bf},name={Table},labelsep=period}
 \usepackage[english]{babel}
 \usepackage{csquotes}
+% HERE
 \usepackage[backend=biber, bibstyle=ieee]{biblatex}
+% \usepackage[backend=biber]{biblatex}
 \renewbibmacro{in:}{}
 \addbibresource{references.bib}
 \let\cite\parencite
@@ -205,6 +207,9 @@
 %\newcommand{\bibfont}{\singlespacing}
 % need this command to keep single spacing in the bibliography when using natbib
 
+% HERE
+% \bibliographystyle{ieeetr}
+
 \include{chap1-introduction}
 \include{chap2-algorithm}
 \include{chap3-performance-assessment}
@@ -214,7 +219,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% HERE
 \printbibliography
+% \bibliography{references}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
