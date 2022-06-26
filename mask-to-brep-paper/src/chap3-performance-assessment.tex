@@ -41,17 +41,17 @@ The shape and volume errors were compared between the commercial software and th
 \begin{figure}[h!]
 \centering
 \subfigure[]{%
-	\includegraphics[scale=0.28]{media/7-performance/11-graph-1a.pdf}}
+	\includegraphics[scale=0.28]{media/7-performance/graph-resolution-shape.pdf}}
 \subfigure[]{%
-	\includegraphics[scale=0.28]{media/7-performance/11-graph-1b.pdf}}
+	\includegraphics[scale=0.28]{media/7-performance/graph-resolution-volume.pdf}}
 %	
-\caption{Comparison of shape error (a) and volume error (b) between commercial software and proposed method as b-rep resolution is varied.}
+\caption{Comparison of (a) shape error and (b) volume error of proposed method with existing approaches as the b-rep resolution is varied.}
 \label{fig:graph1}
 \end{figure}
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[scale=0.25]{media/7-performance/3-demos-4.pdf}
-	\caption{Image masks (green) and corresponding b-reps for commercial software (red) and proposed method (blue) for selected b-rep resolutions.}
+	\includegraphics[scale=0.10]{media/7-performance/spheres-resolution.pdf}
+	\caption{Comparison of proposed method with existing approaches for selected b-rep resolutions.}
 	\label{fig:demos1}
 \end{figure} \\
 %
@@ -60,17 +60,17 @@ The shape and volume errors were compared between the commercial software and th
 \begin{figure}[b!]
 	\centering
 	\subfigure[]{%
-		\includegraphics[scale=0.28]{media/7-performance/11-graph-2a.pdf}}
+		\includegraphics[scale=0.28]{media/7-performance/graph-size-shape.pdf}}
 	\subfigure[]{%
-		\includegraphics[scale=0.28]{media/7-performance/11-graph-2b.pdf}}
+		\includegraphics[scale=0.28]{media/7-performance/graph-size-volume.pdf}}
 	%	
-	\caption{Comparison of shape error (a) and volume error (b) between commercial software and proposed method as the radius of the exact sphere is varied.}
+	\caption{Comparison of (a) shape error and (b) volume error of proposed method with existing approaches as the sphere radius is varied.}
 	\label{fig:graph2}
 \end{figure}
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[scale=0.25]{media/7-performance/3-demos-5.pdf}
-	\caption{Image masks (green) and corresponding b-reps for commercial software (red) and proposed method (blue) for selected sphere radii.}
+	\includegraphics[scale=0.10]{media/7-performance/spheres-size.pdf}
+	\caption{Comparison of proposed method with existing approaches for selected sphere radii.}
 	\label{fig:demos2}
 \end{figure}
 {\noindent}As a final point of quantitative comparison, the two methods are compared for a sphere of $R = 80$ voxels that is translated from center along the direction $\bm{i}  + 2\bm{j} + 3\bm{k}$, while keeping the resulting b-rep fixed at $n = 10428$ vertices. The intent of this case is to test the sensitivity of the methods to the location of the object relative to the image's voxel array. Ideally, the b-reps should be consistently accurate regardless of location.  Indeed, both methods show very low sensitivity to the translation of the object within the image, as shown in~\figref{graph3}. The relative standard deviations in shape error for the commercial software and proposed method were $2.4\%$ and $1.1\%$, respectively. For volume error, they were $1.7\%$ and $2.1\%$. \\
@@ -78,11 +78,11 @@ The shape and volume errors were compared between the commercial software and th
 \begin{figure}[b!]
 	\centering
 	\subfigure[]{%
-		\includegraphics[scale=0.28]{media/7-performance/12-graph-3a.pdf}}
+		\includegraphics[scale=0.28]{media/7-performance/graph-center-shape.pdf}}
 	\subfigure[]{%
-		\includegraphics[scale=0.28]{media/7-performance/12-graph-3b.pdf}}
+		\includegraphics[scale=0.28]{media/7-performance/graph-center-volume.pdf}}
 	%	
-	\caption{Comparison of the shape error (a) and volume error (b) between the commercial software and the proposed method as the center of the sphere is translated relative to the image mask.}
+	\caption{Comparison of (a) shape error and (b) volume error of the proposed method with existing approaches as the sphere center is translated.}
 	\label{fig:graph3}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,8 +91,22 @@ The shape and volume errors were compared between the commercial software and th
 \label{The Polluted Sphere}
 
 \color{purple}
-
-Text
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.10]{media/7-performance/spheres-noise.pdf}
+	\caption{Comparison of proposed method with existing approaches for selected mask noise.}
+	\label{fig:demos2}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\subfigure[]{%
+		\includegraphics[scale=0.28]{media/7-performance/graph-noise-shape.pdf}}
+	\subfigure[]{%
+		\includegraphics[scale=0.28]{media/7-performance/graph-noise-volume.pdf}}
+	%	
+	\caption{Comparison of (a) shape error and (b) volume error of the proposed method with existing approaches as noise near the mask boundary is increased.}
+	\label{fig:graph4}
+\end{figure}
 
 \color{black}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,9 +118,9 @@ Lastly, we present several qualitative comparisons based on real image masks gen
 \begin{figure}[h!]
 	\centering
 	% HERE
-	\includegraphics[scale=0.08	]{media/7-performance/realExamples-reduced.pdf}
-	% \includegraphics[scale=0.08	]{media/7-performance/realExamples.pdf}
+%	\includegraphics[scale=0.08]{media/7-performance/realExamples-reduced.png}
+	 \includegraphics[scale=0.08]{media/7-performance/realExamples.png}
 	% HERE	
-	\caption{Comparison of proposed method to existing approaches for various input image masks generated from MRI and CT scans. Note the proposed method's robustness to noisy inputs for the brain (upper right), distal femur (middle left), and equine proximal sesamoid (bottom right). The ``marching cubes'' approach applies the same decimation and smoothing as the proposed method following conventional marching cubes, for fair comparison. The ``Screened Poisson'' approach applies Screened Poisson surface reconstruction on oriented point clouds generated from the scheme described in the proposed method. Sources: heart~\cite{cvgg}, lungs~\cite{rikxoort_2009}, distal femur~\cite{epperson_2013}, liver~\cite{bilic_2019}, upper left second molar (author's), brain~\cite{marcus_2007}, skull~\cite{clark_2013}, pelvis~\cite{clark_2013}, L5 lumbar~\cite{yao_2016}, and equine proximal sesamoid~\cite{shaffer2021}}
+	\caption{Comparison of proposed method with existing approaches for various input image masks generated from MRI and CT scans. Note the proposed method's robustness to noisy inputs for the brain (upper right), distal femur (middle left), and equine proximal sesamoid (bottom right). The ``marching cubes'' approach applies the same decimation and smoothing as the proposed method following conventional marching cubes, for fair comparison. The ``Screened Poisson'' approach applies Screened Poisson surface reconstruction on oriented point clouds generated from the scheme described in the proposed method. Sources: heart~\cite{cvgg}, lungs~\cite{rikxoort_2009}, distal femur~\cite{epperson_2013}, liver~\cite{bilic_2019}, upper left second molar (author's), brain~\cite{marcus_2007}, skull~\cite{clark_2013}, pelvis~\cite{clark_2013}, L5 lumbar~\cite{yao_2016}, and equine proximal sesamoid~\cite{shaffer2021}}
 	\label{fig:example-meshes}
 \end{figure}
