@@ -16,9 +16,9 @@ where $d(\cdot,\cdot)$ is the Euclidean distance. The background image is assume
 \subsection{\textcolor{purple}{Error Measures}}
 \label{Error Measures}
 
-In order to quantify performance, two error metrics are defined: a {\em shape error} and a {\em volume error}. These metrics characterize the departure of the b-rep from the perfect sphere.  There are two sources of error~\cite{young_2008}: 1) error due to approximating the perfect sphere with a binary image mask, or the {\em image-based error}; and 2) error due to reconstructing the binary image mask with a facetized b-rep.  The latter dictates a method's ability to {\em converge to geometry}. The image mask defined above does not, of course, yield perfect image-based accuracy. For these purposes, though, we will assume that the image-based error is negligible, and we will focus on the ability of the method to converge to geometry.\\ \\
+In order to quantify performance, two error metrics are defined: a {\em shape error} and a {\em volume error}. These metrics characterize the departure of the b-rep from an exact sphere. There are two sources of error~\cite{young_2008}: 1) error due to approximating the sphere with a binary image mask, or the {\em image-based error}; and 2) error due to reconstructing the binary image mask with a facetized b-rep. The latter dictates a method's ability to {\em converge to geometry}. The image mask defined above does not, of course, yield perfect image-based accuracy. For these purposes, though, we will assume that the image-based error is negligible, and we will focus on the ability of the method to converge to geometry.\\ \\
 %
-The shape error measures the surface-normal deviation of our algorithm's end-result b-rep from the perfect sphere. The measure is constructed first by projecting each facet of the b-rep onto the exact sphere. The normal of each facet is compared to the normal of the exact sphere at the centroid of the projected facet by computing the magnitude of their cross product. An area-weighted sum is then taken over the b-rep, and finally the sum is normalized by the surface area of the b-rep. The error measure therefore lies in the range $\left [0,1\right]$. The shape error $e_s$, as described, can be calculated from:
+The shape error measures the surface-normal deviation of our algorithm's end-result b-rep from the exact sphere. The measure is constructed first by projecting each facet of the b-rep onto the exact sphere. The normal of each facet is compared to the normal of the exact sphere at the centroid of the projected facet by computing the magnitude of their cross product. An area-weighted sum is then taken over the b-rep, and finally the sum is normalized by the surface area of the b-rep. The error measure therefore lies in the range $\left [0,1\right]$. The shape error $e_s$, as described, can be calculated from:
 \begin{equation} 
 	e_s = \frac{ \sum \limits_{f\in\mathcal{F}} A_f \lVert {\bf n}_f \times {\bf n}_s \rVert}{\sum \limits_{f\in\mathcal{F}} A_f},
 \end{equation}
@@ -29,7 +29,7 @@ The volume error measures the unsigned volume enclosed between the b-rep and the
 \label{vol err}
 	e_v = \frac{1}{4\pi R^2} \Big[\sum \limits_{f \in \mathcal{F}\textsl{}} \ \int \limits_{\gamma_f} (r - R)^2 d\alpha \Big]^{1/2} .
 \end{equation}
-Here, $r = \lVert {\bm x} \rVert$ is the distance from the sphere center to a point on the planar facet associated with the projection $\gamma_f$, and $R$ is the radius of the exact sphere.  The indicated integrals are performed numerically on the projected facets. Six quadrature points were found to provide sufficient accuracy. The volume error is rendered dimensionless by normalizing by the surface area of the underlying perfect sphere.
+Here, $r = \lVert {\bm x} \rVert$ is the distance from the sphere center to a point on the planar facet associated with the projection $\gamma_f$, and $R$ is the radius of the exact sphere.  The indicated integrals are performed numerically on the projected facets. Six quadrature points were found to provide sufficient accuracy. The volume error is rendered dimensionless by normalizing by the surface area of the underlying sphere.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\textcolor{purple}{The Unpolluted Sphere}}
@@ -45,13 +45,13 @@ The shape and volume errors were compared between the commercial software and th
 \subfigure[]{%
 	\includegraphics[scale=0.28]{media/7-performance/graph-resolution-volume.pdf}}
 %	
-\caption{Comparison of (a) shape error and (b) volume error of proposed method with existing approaches as the b-rep resolution is varied.}
+\caption{Comparison of (a) shape error and (b) volume error of proposed method with different approaches as the b-rep resolution is varied.}
 \label{fig:graph1}
 \end{figure}
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[scale=0.10]{media/7-performance/spheres-resolution.pdf}
-	\caption{Comparison of proposed method with existing approaches for selected b-rep resolutions.}
+	\caption{Comparison of proposed method with different approaches for selected b-rep resolutions.}
 	\label{fig:demos1}
 \end{figure} \\
 %
@@ -64,13 +64,13 @@ The shape and volume errors were compared between the commercial software and th
 	\subfigure[]{%
 		\includegraphics[scale=0.28]{media/7-performance/graph-size-volume.pdf}}
 	%	
-	\caption{Comparison of (a) shape error and (b) volume error of proposed method with existing approaches as the sphere radius is varied.}
+	\caption{Comparison of (a) shape error and (b) volume error of proposed method with different approaches as the sphere radius is varied.}
 	\label{fig:graph2}
 \end{figure}
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[scale=0.10]{media/7-performance/spheres-size.pdf}
-	\caption{Comparison of proposed method with existing approaches for selected sphere radii.}
+	\caption{Comparison of proposed method with different approaches for selected sphere radii.}
 	\label{fig:demos2}
 \end{figure}
 {\noindent}As a final point of quantitative comparison, the two methods are compared for a sphere of $R = 80$ voxels that is translated from center along the direction $\bm{i}  + 2\bm{j} + 3\bm{k}$, while keeping the resulting b-rep fixed at $n = 10428$ vertices. The intent of this case is to test the sensitivity of the methods to the location of the object relative to the image's voxel array. Ideally, the b-reps should be consistently accurate regardless of location.  Indeed, both methods show very low sensitivity to the translation of the object within the image, as shown in~\figref{graph3}. The relative standard deviations in shape error for the commercial software and proposed method were $2.4\%$ and $1.1\%$, respectively. For volume error, they were $1.7\%$ and $2.1\%$. \\
@@ -82,7 +82,7 @@ The shape and volume errors were compared between the commercial software and th
 	\subfigure[]{%
 		\includegraphics[scale=0.28]{media/7-performance/graph-center-volume.pdf}}
 	%	
-	\caption{Comparison of (a) shape error and (b) volume error of the proposed method with existing approaches as the sphere center is translated.}
+	\caption{Comparison of (a) shape error and (b) volume error of the proposed method with different approaches as the sphere center is translated.}
 	\label{fig:graph3}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,8 +94,8 @@ The shape and volume errors were compared between the commercial software and th
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[scale=0.10]{media/7-performance/spheres-noise.pdf}
-	\caption{Comparison of proposed method with existing approaches for selected mask noise.}
-	\label{fig:demos2}
+	\caption{Comparison of proposed method with different approaches for selected mask noise.}
+	\label{fig:demos3}
 \end{figure}
 \begin{figure}[h!]
 	\centering
@@ -104,7 +104,7 @@ The shape and volume errors were compared between the commercial software and th
 	\subfigure[]{%
 		\includegraphics[scale=0.28]{media/7-performance/graph-noise-volume.pdf}}
 	%	
-	\caption{Comparison of (a) shape error and (b) volume error of the proposed method with existing approaches as noise near the mask boundary is increased.}
+	\caption{Comparison of (a) shape error and (b) volume error of the proposed method with different approaches as noise near the mask boundary is increased.}
 	\label{fig:graph4}
 \end{figure}
 
@@ -118,6 +118,6 @@ Lastly, we present several qualitative comparisons based on real image masks gen
 \begin{figure}[h!]
 	\centering
 	 \includegraphics[scale=0.082]{media/7-performance/realExamplesNew.pdf}
-	\caption{Comparison of proposed method with existing approaches for various input image masks generated from MRI and CT scans. Note the proposed method's robustness to noisy inputs for the brain (upper right), distal femur (middle left), and equine proximal sesamoid (bottom right). The ``marching cubes'' approach applies the same decimation and smoothing as the proposed method following conventional marching cubes, for fair comparison. The ``Screened Poisson'' approach applies Screened Poisson surface reconstruction on oriented point clouds generated from the scheme described in the proposed method. Sources: heart~\cite{cvgg}, lungs~\cite{rikxoort_2009}, distal femur~\cite{epperson_2013}, liver~\cite{bilic_2019}, upper left second molar (author's), brain~\cite{marcus_2007}, skull~\cite{clark_2013}, pelvis~\cite{clark_2013}, L5 lumbar~\cite{yao_2016}, and equine proximal sesamoid~\cite{shaffer2021}}
+	\caption{Comparison of proposed method with different approaches for various input image masks generated from MRI and CT scans. Note the proposed method's robustness to noisy inputs for the brain (upper right), distal femur (middle left), and equine proximal sesamoid (bottom right). The ``marching cubes'' approach applies the same decimation and smoothing as the proposed method following conventional marching cubes, for fair comparison. The ``Screened Poisson'' approach applies Screened Poisson surface reconstruction on oriented point clouds generated from the scheme described in the proposed method. Sources: heart~\cite{cvgg}, lungs~\cite{rikxoort_2009}, distal femur~\cite{epperson_2013}, liver~\cite{bilic_2019}, upper left second molar (author's), brain~\cite{marcus_2007}, skull~\cite{clark_2013}, pelvis~\cite{clark_2013}, L5 lumbar~\cite{yao_2016}, and equine proximal sesamoid~\cite{shaffer2021}}
 	\label{fig:example-meshes}
 \end{figure}

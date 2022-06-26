@@ -58,25 +58,18 @@ Tetrahedral meshing is the natural choice for meshing volumes bounded by triangu
  Updegrove \textit{et al.}~\cite{updegrove_2016} used a \textit{lofting} technique on a series of 2D segmentations to generate models of blood vessels. In lofting, an approximate centerline is drawn, and 2D segmentations are combined using spline interpolating functions to generate surfaces. Unstructured tetrahedral meshes are then generated from the surfaces. Lofting is known as a 2.5D approach because stacked contours of neighboring slices cannot capture arbitrary 3D topologies. The interpolating splines typically require manual selection of control points~\cite{young_2008}. Treating an image mask as a series of 2D masks was a popular approach in past decades, More recent approaches treat the mask as a three-dimensional object to avoid the limitations of lofting techniques.
  
  Young \textit{et al.}~\cite{young_2008} used a \textit{direct meshing} approach to generate meshes from multi-material image masks, without the intermediate step of creating a surface mesh. Young \textit{et al.} combined the surface generation and mesh generation stages into one process via their \textit{enhanced volumetric marching cubes} approach. Rather than simply determining triangular surface patches from the intersection of the isosurface with grid cells, volumetric marching cubes generates tetrahedral volumes directly. The authors extended their volumetric algorithm to handle intersections of up to eight regions in one grid cell -- the maximum number of intersections that can occur for a Cartesian grid. The resulting mesh is \textit{mixed hex-tet}, where tetrahedra exist near the surface based on the extended volumetric marching cubes approach; internal voxels are converted directly to hexahedra; and pyramidal and tetrahedral elements exist in the transitional layer in between. The authors also utilized partial volume-based interpolation to improve surface smoothness. Additional efforts to reduce the mesh size were made by converting surface tetrahedra to hexahedra where appropriate, and by performing an octree-based approach to collect neighboring interior hexahedral elements into larger elements. Nonetheless, this \textit{grid-based} approach results in a surface mesh that is very fine, which subsequently constrains the size of interior elements in the volume mesh. The resulting mesh from this approach yields a large number of degrees of freedom for simulation purposes. Thus, for practical purposes, the number of points and polyhedra defining the surface must be reduced, or \textit{decimated}, to allow for a subsequent coarser volumetric discretization. Indeed, the default and recommended approach in their software \textit{Simpleware} (known as \textit{+FE Free}) is to follow the two-step paradigm of surface generation followed by CAD-based meshing as described previously. Namely, the software extracts the resulting surface from the extended volumetric marching cubes step, performs multi-part decimation and smoothing~\cite{egst}, and finally uses a conventional CAD-based tetrahedral mesher to generate fully tetrahedral meshes from the polygonized surfaces.
- 
- 
 
-\begin{figure}[]
+\begin{figure}[t]
 	\centering
-		\includegraphics[scale=0.25]{media/flowchart.pdf}
-	\caption{Flowcharts of various techniques to generate b-reps from image masks.}
+		\includegraphics[scale=0.3]{media/flowchartNew.pdf}
+	\caption{Flowcharts of differerent techniques to generate b-reps from image masks.}
 	\label{fig:flowchart}
 \end{figure}\noindent
-
-
 
 %
 Medical imaging is the process of generating discrete image representations of the regions of interest. For the present purposes, the acquired image provides a three-dimensional rectilinear grid of point intensity values as input to the rest of the workflow. In the case of MRI, these values are weighted proton densities, which effectively measure water content. In the case of CT, they are attenuation measurements from an x-ray beam source, which effectively measure density. For typical applications, we can expect millimeter resolution, and in some cases considerably better~\cite{van2012super}.\\ \\
 %
 Image segmentation is the process of partitioning an image into non-overlapping regions corresponding to different tissues or objects in an image. Contrast differences between neighboring tissues can be difficult to identify due in part to noise and artifacts. Thus, image processing in the form of smoothing, filtering, and resampling are performed to improve the effectiveness of the image segmentation technique. The output from image segmentation consists of \textit{image masks} defining each of the regions of interest in the field of view. If there is only one region of interest, the output is termed a \textit{binary image mask}. Some popular image segmentation techniques include thresholding, level set methods~\cite{malladi_1995, sethian_1996}, and machine-learning-based approaches~\cite{litjens_2017}.  For practical purposes, manual fine-tuning is typically required for any of these methods.\\ \\
-
-
-
 
 
 
