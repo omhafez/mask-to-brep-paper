@@ -42,7 +42,9 @@
 % for coloring specific references
 \let\mybibitem\bibitem
 \renewcommand{\bibitem}[1]{%
-\ifstrequal{#1}{edelsbrunner1994}{\color{purple}\mybibitem{#1}}
+\ifstrequal{#1}{meshlab}{\color{purple}\mybibitem{#1}}
+{\ifstrequal{#1}{taubin1995signal}{\color{purple}\mybibitem{#1}}
+{\ifstrequal{#1}{edelsbrunner1994}{\color{purple}\mybibitem{#1}}
 {\ifstrequal{#1}{coeurjolly2021}{\color{purple}\mybibitem{#1}}
 {\ifstrequal{#1}{fleishman2005}{\color{purple}\mybibitem{#1}}
 {\ifstrequal{#1}{brochu2010}{\color{purple}\mybibitem{#1}}
@@ -53,8 +55,9 @@
 {\ifstrequal{#1}{boltcheva2017}{\color{purple}\mybibitem{#1}}
 {\ifstrequal{#1}{boltcheva2009}{\color{purple}\mybibitem{#1}}
 {\ifstrequal{#1}{shaffer2021}{\color{purple}\mybibitem{#1}}
-{\color{black}\mybibitem{#1}}}}}}}}}}}}%
+{\color{black}\mybibitem{#1}}}}}}}}}}}}}}%
 }
+
 
 % HERE (uncomment in overleaf, comment out in texstudio)
 \usepackage[english]{babel}
