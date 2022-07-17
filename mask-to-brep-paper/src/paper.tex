@@ -38,12 +38,6 @@
 \usepackage{caption}
 \captionsetup[figure]{labelfont={bf},name={Fig.},labelsep=period}
 \captionsetup[table]{labelfont={bf},name={Table},labelsep=period}
-\let\mybibitem\bibitem
-\renewcommand{\bibitem}[1]{%
-  \ifstrequal{#1}{nature}
-    {\color{blue}\mybibitem{#1}}
-    {\color{black}\mybibitem{#1}}%
-}
 
 % for coloring specific references
 \let\mybibitem\bibitem
