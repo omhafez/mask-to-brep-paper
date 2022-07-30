@@ -1,0 +1,10 @@
+\section{Contribution}
+
+The workflow we present takes as input a binary segmented image and produces a facetized boundary representation.  The segmented image is presumed to contain mis-colored voxels, such that the desired b-rep will generally be topologically distinct from the input image's complex of binary-interface surfels.  The first step in our algorithm is a novel boundary point/normal estimation procedure that operates on partially-overlapping subsets of voxels, or {\em windows}.  This step provides a means for smoothing both geometric and topological irregularities, and is a distinguishing feature of our algorithm.  It is the main mechanism for robustly recovering smooth b-reps from noisy voxel colorings.  The window size is selectable; it sets the length scale associated with the smoothing.  The oriented point cloud that emerges from this first step is then used in a Voronoi-based surface-reconstruction procedure.  It bears emphasis that, prior to this surface-reconstruction step, there is no surface as such, and therefore nothing to sample.  In effect, we refrain from assuming that the surfel complex at the interface between mono-colored voxel regions is homeomorphic to the desired b-rep.  The term ``surface synthesis'' might therefore be more appropriate than the standard ``surface reconstruction,'' which we nevertheless retain. The resulting surface is guaranteed to be closed and manifold.  However, depending on the details of the Voronoi surface-reconstruction procedure and the desired mesh density, a subsequent smoothing and decimation step is often warranted.  For this, we use existing freely-available algorithms.
+
+In section XX, we compare the performance of 
+
+
+
+
+Provided the context of the image-based modeling workflow, we present our Voronoi-based surface generation algorithm in the next section. A performance assessment follows, which includes comparison to \textcolor{purple}{other approaches}.  We consider both quantitative error measures as well as qualitative, visual comparison of b-rep results.  The paper is closed with a summary and discussion of future directions for this work.
