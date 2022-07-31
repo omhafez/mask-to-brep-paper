@@ -1,6 +1,9 @@
 \documentclass[12pt]{article}
 \usepackage[margin=0.75in]{geometry}
-
+\usepackage{parskip}
+%\usepackage[skip=10pt,indent=40pt]{parskip}
+%\setlength{\parindent}{20pt}
+%\setlength{\parskip}{10pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                      %
 %               LATEX COMMANDS FOR DOCUMENT SETUP                      %
@@ -77,7 +80,7 @@
     pdfborder = {0 0 0}
 }
 \usepackage{bm}
-\usepackage[parfill]{parskip}
+% \usepackage[parfill]{parskip}
 
 \newcommand*{\figref}[2][]{%
   \hyperref[{fig:#2}]{%
@@ -130,8 +133,6 @@
 \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}   
 
 \hyphenation{dis-ser-ta-tion blue-print man-u-script pre-par-ing}
-
-\setlength{\parindent}{0pt}
 
 %\usepackage{bookmark}
 %\usepackage[us,nodayofweek,12hr]{datetime}
