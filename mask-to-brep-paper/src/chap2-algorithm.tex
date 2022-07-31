@@ -6,13 +6,13 @@ The details of our approach are presented in this section.  In the subsections t
 \label{Point Cloud Generation}
 
 A point cloud is ``oriented'' if unit surface normals are computed at each point in addition to the point's spatial coordinates. The algorithm computes the point cloud by sampling the image mask with small, overlapping \textit{windows} to locally approximate the material boundary. For each three-dimensional window, the following tasks are performed:
-\vspace{2mm}
+\vspace{3mm}
 \begin{itemize}[noitemsep]
   \item Predict whether the window intersects the material boundary.
   \item Locally approximate the boundary via an optimization problem. 
   \item Place a point and associated normal on the approximated boundary surface.
 \end{itemize}
-\vspace{2mm}
+\vspace{3mm}
 The basic sequence is shown in 2D in panels (a-c) of \figref{vor}. Each step in generating oriented point clouds is detailed in the subsections below.
 
 \begin{figure}[ht]
@@ -39,7 +39,7 @@ The basic sequence is shown in 2D in panels (a-c) of \figref{vor}. Each step in 
 We denote the set of all voxels in a segmented image as $\mathcal{I}$. The segmented image  $\mathcal{I}$ is sampled with overlapping windows, each of which is a voxelized sphere with voxel radius $R_{\mathcal{W}}$ (an integer). The translation in each Cartesian direction between adjacent windows is $d_{\mathcal{W}}$, which is also an integer voxel count. The set of voxels in a particular window is denoted $\mathcal{W}$, and the number of voxels in that window is $n_{\mathcal{W}}$. We further define the subset of voxels in $\mathcal{W}$ that are designated as solid material to be $\mathcal{M}$, with $n_{\mc{M}} = | \mc{M} |$. \\ \\
 %
 A window $\mathcal{W}$ is marked for further processing if it satisfies a threshold requirement, as follows.  Letting $k_{\mathcal{M}} = n_{\mathcal{M}}/n_{\mathcal{W}}$, we define a threshold value $\overline{k}_{\mathcal{M}}$ such that the window is retained only if $k_{\mathcal{M}} \in (\overline{k}_{\mathcal{M}}, 1 - \overline{k}_{\mc{M}})$.  Thus, further calculations are performed only if sufficiently many voxels of both solid material and of void are present in the window to support approximation of a material boundary. Refer to~\tabref{window} for a summary of these variables definitions.
-
+\vspace{2mm}
 \begin{table}[htbp!]
  \centering
    \begin{tabular}{|c||c|}
@@ -61,7 +61,7 @@ A window $\mathcal{W}$ is marked for further processing if it satisfies a thresh
 
 Given a window $\mathcal{W}$ that is marked as intersecting the body boundary, we seek to derive a local boundary-surface patch $\mc{S}$ that optimally represents the boundary separating $\mc{M}$ and $\mc{W} \setminus \mc{M}$.  The overall plan is as follows: we define geometrically smooth (i.e., not voxelated), disjoint, simply connected regions that approximate $\mc{W}$ and $\mc{M}$, whose common boundary serves to define the surface patch $\mc{S}$.  The regions and the surface $\mc{S}$ are chosen to have simple, parameterizable shapes; optimally fitting them to $\mc{W}$ and $\mc{M}$ therefore reduces to a small algebraic minimization problem.  We require that $\mc{S}$ be non-self-intersecting, and that it divides the smooth approximation to $\mc{W}$ into exactly two subregions. 
 Proceeding in this direction, let $\mc{D}$ be a sphere whose center and radius $R$ are chosen such that the centroid and volume of $D$ match those of $\mc{W}$.  Next, we define $\Omega_p$ as the spatial region occupied by $\mc{M}$, and $\Omega$ as the subset of $\mc{D}$ that lies on the material side of $\mc{S}$.  We assume that $\mc{S}$ intersects $\partial \mc{D}$ in a simple closed loop, so that $\Omega$ is a simply-connected subset of $\mc{D}$ that resembles a lens. The situation is illustrated in \figref{figure3} in 2D.
-\begin{figure}[b!]
+\begin{figure}[ht!]
 	\centering
 	\subfigure[Window $\mathcal{W}$]{%
 		\includegraphics[scale=0.72]{media/imgs-073022/om/dem2-3.pdf}
@@ -90,14 +90,14 @@ I_{x\phantom{z}}^p &= \int_{\Omega_p}xdv, &&I_{y\phantom{z}}^p = \int_{\Omega_p}
 I^p_{xy} &= \int_{\Omega_p}xydv, &&I^p_{xz} = \int_{\Omega_p}xzdv, &&I^p_{yz} = \int_{\Omega_p}yzdv, \\
 I^p_{xx} &= \int_{\Omega_p}(y^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{yy} = \int_{\Omega_p}(x^2 + z^2)dv, \text{\ \ \ \ \ \ }&&I^p_{zz} = \int_{\Omega_p}(x^2 + y^2)dv.
 \end{alignat}
-Analogous quantities $V$, $I_x$, etc. are defined for $\Omega$.  Placing the coordinate origin at the common centroid of $\mc{W}$ and $\mc{D}$, the planar surface $\mc{S}$ is defined by the signed value $x' = d$, where the primed coordinates are oriented such that the $x'$ axis is normal to $\mc{S}$.  See \figref{quad}.
-\begin{figure}[t!]
+Analogous quantities $V$, $I_x$, etc. are defined for $\Omega$.  Placing the coordinate origin at the common centroid of $\mc{W}$ and $\mc{D}$, the planar surface $\mc{S}$ is defined by the signed value $x' = d$, where the primed coordinates are oriented such that the $x'$ axis is normal to $\mc{S}$.  See \figref{quad}. \\ \\ \\
+\begin{figure}[h]
 	\centering
 		\includegraphics[scale=0.3]{media/om/window.pdf}
 	\caption{Plane boundary approximation demonstrated in 2D.}
 	\label{fig:quad}
 \end{figure}\noindent
-
+%
 Turning now to the formulation of the error function, we define the following quantities:
 \begin{alignat}{3}
 f^p &= V^p, \text{\ \ \ \ \ }&&f(d,\psi,\theta) = V, \\
@@ -116,8 +116,8 @@ e_2(d,\psi,\theta) &=  \sqrt{\frac{(h_{ij} - h_{ij}^p)(h_{ij} - h_{ij}^p)}{h_{kl
 \label{obj func}
 \mathcal{F}(d,\psi,\theta) = \beta_0e_0 + \beta_1e_1 + \beta_2e_2,
 \end{align}
-where $\beta_i$ are adjustable weights in the range $(0,1)$ and $\sum \limits_i\beta_i = 1$.  The error $\mc{F}$ is an explicit function of the parameters $d$, $\psi$, and $\theta$, where $\psi$ and $\theta$ are the orientation angles of the plane normal relative to the voxel axes $(x, y, z)$, and $d$ is the plane's offset from the centroid of the window.
-
+where $\beta_i$ are adjustable weights in the range $(0,1)$ and $\sum \limits_i\beta_i = 1$.  The error $\mc{F}$ is an explicit function of the parameters $d$, $\psi$, and $\theta$, where $\psi$ and $\theta$ are the orientation angles of the plane normal relative to the voxel axes $(x, y, z)$, and $d$ is the plane's offset from the centroid of the window. \\ \\
+%
 We seek the solution to the following unconstrained minimization problem: $\displaystyle \min_{d, \psi, \theta} \mathcal{F}(d,\psi,\theta)$, which can be solved by a variety of well-established techniques once the moments of $\Omega$ and $\Omega_p$ are defined. The moments of $\Omega_p$ are computed based on a straightforward use of voxel dimensions and the parallel axis theorem. The moments of $\Omega$, on the other hand, are first computed as a function of $d$ in the primed coordinate system, and then transformed to the $(x, y, z)$ frame based on $\psi$ and $\theta$. The relevant geometric quantities in the primed system are computed as follows:
 \begin{align}
 \color{purple}{p^2} &\color{purple}{= R^2 - d^2}\color{black}{,} \\
@@ -144,7 +144,7 @@ I_{y'y'} &=  \begin{cases}
 I_{z'z'} &= I_{y'y'}.
 \end{align}
 As expected, some moments exhibit symmetries about the $y'$ and $z'$ axes. \\ \\
-
+%
 The moments are transformed back to the global voxel-grid frame so that they can be compared to those of $\Omega_p$. This transformation is different for the zeroth, first, and second polynomial moments due to the different tensor rank for each of these quantities. The first and second polynomial moments are transformed in the following manner (no transformation is required for the zeroth moment):
 \begin{gather}
 \bm{R} = \left[\begin{array} {ccc} {\cos\psi\cos\theta} & {-\sin\psi} & {\cos\psi\sin\theta}\\ {\sin\psi\cos\theta} & {\cos\psi} & {\sin\psi\sin\theta}, \\
@@ -153,12 +153,12 @@ The moments are transformed back to the global voxel-grid frame so that they can
 \bm{I}' = \left[\begin{array} {ccc} {I_{x'x'}} & {-I_{x'y'}} & {-I_{x'z'}}\\ {-I_{x'y'}} & {I_{y'y'}} & {-I_{y'z'}} \\ -{I_{x'z'}} & {-I_{y'z'}} & {I_{z'z'}} \end{array} \right], \\
 \bm{I} = \left[\begin{array} {ccc} {I_{xx}} & {-I_{xy}} & {-I_{xz}}\\ {-I_{xy}} & {I_{yy}} & {-I_{yz}} \\ -{I_{xz}} & {-I_{yz}} & {I_{zz}} \end{array} \right] = \bm{R}\bm{I}'\mathbf{R}^T.
 \end{gather}
-\noindent With all relevant quantities in place, the \textit{subplex search method}~\cite{rowan} is used to minimize the error function (\ref{obj func}) using an implementation in the package \textit{NLopt} \cite{nlo}. The method is a derivative-free method that is well-suited for optimizing objective functions that are noisy or discontinuous. It was selected as the optimization approach due to the existence of square roots in the objective function, and the fact that robustness to a wide range of inputs was the highest priority in developing the algorithm.
-
-Convergence is assumed to be achieved when $\left| \mathcal{F}_{k+1} - \mathcal{F}_{k}\right| < \varepsilon$ on successive iterations, where $k$ is the iteration number and  $\varepsilon$ is the convergence tolerance. For the specific examples and algorithm parameters discussed later in this section, convergence is achieved for each boundary approximation after typically hundreds of iterations. This large value may be due to the admittedly tight tolerance for $\varepsilon$ of $10^{-14}$; to nonlinearities or saddle points in the error function; or to possible inefficiencies in the nonlinear optimization tool used. However, the local optimization problems are small, with only three independent variables.  And, the algorithm generates high-quality results, with the process for all windows usually completing in less than one minute of wall clock time on a personal computer, even for complex geometries. Therefore, convergence rate was not further explored as a means of improving the algorithm.
-
-Finally, we require that once convergence has been satisfied, the criterion $\mathcal{F} < \overline{\mathcal{F}}$ must also be met for the point and normal to be retained. In this way, when $\Omega$ unsatisfactorily approximates $\Omega_p$, the associated point and normal are discarded. This typically occurs in regions of high curvature, where a plane does not approximate the boundary well. We note that, due to the subsequent use of Voronoi tessellation as a means of surface reconstruction, simply discarding a point does not cause a hole or other topological fault to occur in the final b-rep.  
-
+\noindent With all relevant quantities in place, the \textit{subplex search method}~\cite{rowan} is used to minimize the error function (\ref{obj func}) using an implementation in the package \textit{NLopt} \cite{nlo}. The method is a derivative-free method that is well-suited for optimizing objective functions that are noisy or discontinuous. It was selected as the optimization approach due to the existence of square roots in the objective function, and the fact that robustness to a wide range of inputs was the highest priority in developing the algorithm. \\ \\
+%
+Convergence is assumed to be achieved when $\left| \mathcal{F}_{k+1} - \mathcal{F}_{k}\right| < \varepsilon$ on successive iterations, where $k$ is the iteration number and  $\varepsilon$ is the convergence tolerance. For the specific examples and algorithm parameters discussed later in this section, convergence is achieved for each boundary approximation after typically hundreds of iterations. This large value may be due to the admittedly tight tolerance for $\varepsilon$ of $10^{-14}$; to nonlinearities or saddle points in the error function; or to possible inefficiencies in the nonlinear optimization tool used. However, the local optimization problems are small, with only three independent variables.  And, the algorithm generates high-quality results, with the process for all windows usually completing in less than one minute of wall clock time on a personal computer, even for complex geometries. Therefore, convergence rate was not further explored as a means of improving the algorithm. \\ \\
+%
+Finally, we require that once convergence has been satisfied, the criterion $\mathcal{F} < \overline{\mathcal{F}}$ must also be met for the point and normal to be retained. In this way, when $\Omega$ unsatisfactorily approximates $\Omega_p$, the associated point and normal are discarded. This typically occurs in regions of high curvature, where a plane does not approximate the boundary well. We note that, due to the subsequent use of Voronoi tessellation as a means of surface reconstruction, simply discarding a point does not cause a hole or other topological fault to occur in the final b-rep. \\ \\
+%
 The solution to the minimization problem yields the values $d$, $\psi$, and $\theta$ that determine the optimal surface $\mathcal{S}$, from which the boundary point and normal are defined. \tabref{surface} can be consulted for a complete summary of variables discussed regarding local boundary approximation.
 
 \begin{table}[t!]
@@ -205,33 +205,28 @@ Once the parameters $d$, $\psi$, and $\theta$ are selected for a particular wind
 \subsection{Surface Reconstruction}
 \label{Surface Reconstruction}
 
-Surface reconstruction is the process of generating closed, manifold, polygonized surfaces from point clouds. Approaches found in the existing literature typically assume a dense, noisy population of points that are usually generated by structured light or laser-based scanners. Though the proposed algorithm departs from these assumptions to a degree, a brief review of surface reconstruction techniques is still worthwhile. \\ \\
-%
-Among the most well-known surface reconstruction algorithms are the \textit{Power Crust} and \textit{Poisson surface reconstruction} techniques. Amenta \textit{et al.}~\cite{amenta_2001} presented the \textit{Power Crust} algorithm for reconstructing watertight surfaces from unoriented point clouds. The algorithm first constructs the \textit{medial axis transform} from the point cloud, which consists of the set of maximal balls completely contained in the interior of the surface. The algorithm then applies an inverse transform to approximate the medial axis and produce a piecewise linear surface. The algorithm does not perform well when the point set is not sufficiently dense. Kazhdan \textit{et al.} presented \textit{Poisson surface reconstruction}~\cite{kazhdan_2008} and subsequently \textit{screened Poisson surface reconstruction}~\cite{kazhdan_2013} for oriented point clouds. They compute an indicator function defined as 1 for points inside the surface and 0 for points outside, whose gradient approximates the vector field defined by the oriented point cloud. This amounts to solving a Poisson problem for an implicit indicator function, followed by application of marching cubes to polygonize the surface. The \textit{screened} approach provides a soft constraint that encourages the reconstructed isosurface to pass through the input points. In practice, the screened approach is more robust than the original Poisson approach in generating manifold surfaces from complex point clouds. The technique produces smooth surfaces that exhibit resiliency to noise, outliers, and undersampling that makes it perhaps the best available method in many cases. \\ \\
-%
-Many other surface reconstruction approaches exist, including those making use of moving least squares, Delaunay and Voronoi constructions, and variational approaches~\cite{berger}. A novel Voronoi-based approach is presented here as an alternative to these approaches, which is tuned to address the type of noise and point density expected from the point-cloud-generation step described previously. \\ \\
-%
-The proposed surface reconstruction technique relies on constructing a \textit{Voronoi partition}, which for our purposes is a nearest neighbor partitioning of $\mathbb{R}^3$ based on a set of input \textit{Voronoi sites}. The desired output from a Voronoi partition is a mesh -- namely, a set of points, edges, facets, and cells (and their connectivities) that discretize space. We first define the half-space $D(\bm{p},\bm{q})$, comprising all points $\bm{x}$ as close, or closer, to site $\bm{p}$ than to site $\bm{q}$:
+The proposed surface-reconstruction technique relies on constructing a Voronoi partition, which is a nearest-neighbor tessellation of $\mathbb{R}^3$ based on a set of input \textit{Voronoi sites}. The desired output from a Voronoi partition is a mesh -- namely, a set of points, edges, facets, and cells and their connectivities, that discretize space. We first define the half-space $D(\bm{p},\bm{q})$ relative to a pair of sites $(\bm{p}, \bm{q})$:
 \begin{equation}
 D(\bm{p},\bm{q}) = \{\bm{x} \mid d(\bm{p},\bm{x}) \leq d(\bm{q},\bm{x})\},
 \end{equation}
-where a distance function $d$ must be defined. Although there exist more exotic distance functions leading to modified Voronoi partitions, the distance function for standard Voronoi diagrams is simply the Euclidean distance. Defining $\mathcal{P}$ to be the set of Voronoi sites, the \textit{Voronoi cell} $V(\bm{p})$ associated with site $\bm{p}$ is the intersection of all half-spaces involving site $\bm{p}$ and all other sites $\bm{q}$ belonging to $\mathcal{P}$:
+where we take distance function $d$ to be the Euclidean distance.  Defining $\mathcal{P}$ to be the set of Voronoi sites, the \textit{Voronoi cell} $V(\bm{p})$ associated with site $\bm{p}$ is the intersection of all half-spaces involving site $\bm{p}$ and each of the other sites $\bm{q} \in \mathcal{P}$:
 \begin{equation}
 V(\bm{p}) = \bigcap \limits_{\bm{q} \in \mathcal{P}, \bm{q} \neq \bm{p}} D(\bm{p},\bm{q}).
-\end{equation}
-A number of important properties exist for Voronoi partitions and their dual \textit{Delaunay tessellations}. For the present purposes, the most important property is that the surface extracted from a set of Voronoi cells connected by shared facets is watertight and manifold. Several important considerations must be accounted for in constructing a Voronoi partition, including degenerate and near-degenerate cases, the data schema and order of construction of the connected polytopes, and the performance of the algorithm. Refer to Aurenhammer~\cite{aurenhammer_1991} for a detailed survey of the mathematical and algorithmic approaches to Voronoi diagrams. \\ \\
+\end{equation} See \cite{aurenhammer_1991} for a survey of the mathematical properties of, and algorithmic approaches to constructing, Voronoi partitions. \\ \\
 %
-The proposed technique involves the following steps, to be described in turn:
-\vspace{2mm}
+The proposed surface-reconstruction technique involves the following steps:
+\vspace{3mm}
 \begin{itemize}[noitemsep]
-\item Generate the Voronoi site set from the oriented point cloud and perform Voronoi partition of image.
-\item Extract the b-rep as the set of facets that share Voronoi sites with different material types and perform cleanup on that surface.
-\item Decimate and smooth the surface to a more tractable mesh resolution.
+\item Generate the Voronoi site set from the oriented point cloud, and create the Voronoi partition.
+\item Extract the b-rep as the set of facets that share Voronoi sites with differing colors; perform cleanup on the surface.
+\item Decimate and smooth the surface to the desired spatial resolution.
 \end{itemize}
+\vspace{3mm}
+The details of these steps are explained below.
 
 \subsubsection{Voronoi Site Generation and Voronoi Partitioning}
 
-Given the location of a boundary point $\bm{x}_p$ and orientation of its corresponding normal $\bm{n}$, two Voronoi sites are placed on either side of the point along the normal, as shown in~\figref{vor4} and~\figref{d2dvor3}. They are separated from the point by a distance $b$; hence, their locations are $\bm{x}_p \pm b \bm{n}$. The two Voronoi sites are assigned material types. For the two-material case considered here, the site corresponding to the position $\bm{x}_p - b\bm{n}$ is inside $\Omega$, and thus is assigned to the material of interest. The site corresponding to the position $\bm{x}_p + b\bm{n}$ is designated as void material. Voronoi partitioning is performed using an implementation from \textit{Qhull}~\cite{barber_1996} that is robust even for near-degenerate Voronoi site locations. The sequence of point cloud generation, Voronoi site placement, and Voronoi partitioning is illustrated in~\figref{d2dvor}.
+Given the location of a boundary point $\bm{x}_p$ and orientation of its corresponding normal $\bm{n}$, two Voronoi sites are placed on either side of the point along the normal, as shown in \figref{vor4} and \figref{d2dvor3}. They are separated from the point by a selectable distance $b$; i.e. their locations are $\bm{x}_p \pm b \bm{n}$. The two Voronoi sites are assigned different colors. For the two-material case considered here, the site corresponding to the position $\bm{x}_p - b\bm{n}$ is inside $\Omega$, and thus is assigned the ``in-material'' color.  The site corresponding to the position $\bm{x}_p + b\bm{n}$ is designated with the void color.  Voronoi partitioning is performed using an implementation from \textit{Qhull} \cite{barber_1996} that is reliable even for near-degenerate Voronoi site locations.  The raw b-rep consists of Voronoi facets generated by sites of differing color.  The complex of such facets is manifold by construction, and is usually water-tight.  In theory, water-tightness can fail, but this rare case is readily detected, and can easily be remedied by the placement of additional void-colored sites.  The sequence of point cloud generation, Voronoi site placement, and Voronoi partitioning is illustrated in \figref{d2dvor}.
 
 \begin{figure}[htbp!]
 \centering
@@ -254,11 +249,11 @@ Given the location of a boundary point $\bm{x}_p$ and orientation of its corresp
 
 \subsubsection{Surface Extraction and Cleanup}
 
-The b-rep is extracted from the Voronoi partition as the set of facets that share Voronoi sites of differing material type. An additional step is performed, however, to mitigate undesired ``crosstalk'' facets caused by Voronoi partitioning of neighboring site pairs. ``Good facets'' are identified as those facets whose Voronoi sites belong to a site pair originating from the same point and normal, while ``bad facets'' are those facets whose Voronoi sites originate from two different points in the point cloud. For surfaces with small curvature, the total area of the good facets is vastly greater than that of the bad facets. Nonetheless, the existence of bad facets causes a stair-stepping feature in the resulting surface that is undesirable. \\ \\
+The b-rep is extracted from the Voronoi partition as described above.  An additional step is then performed to mitigate undesired ``crosstalk'' facets caused by Voronoi partitioning of neighboring site pairs. ``Good facets'' are identified as those facets whose Voronoi sites belong to a site pair originating with the same point, while ``bad facets'' are those facets whose Voronoi sites originate from two different points in the point cloud. For surfaces with small curvature, the total area of the good facets is vastly greater than that of the bad facets.  Nonetheless, the existence of bad facets causes a stair-stepping feature in the resulting surface that is undesirable. \\ \\
 %
-These artifacts are addressed as follows: ``bad edges'' are identified as those edges that share two bad facets. Networks of connected bad edges are identified, and each network is collapsed to a point (see \figref{cross1}). For surfaces with a small amount of curvature, no bad edges are connected, and thus each is independently collapsed. Any good facet that is connected to a network of bad edges is modified to connect to the new collapsed point. Good facets are subsequently triangulated to maintain planarity following the collapse of bad edges. The sequence is demonstrated for an \textit{ex vivo} human heart example in~\figref{cross2}. \\
+These artifacts are removed in the following way.  ``Bad edges'' are identified as those edges that share two bad facets. Networks of connected bad edges are identified, and each network is collapsed to a point (see \figref{cross1}). For surfaces with a small amount of curvature, no bad edges are connected, and thus each is independently collapsed. Any good facet that is connected to a network of bad edges is modified to connect to the new collapsed point.  Good facets are subsequently triangulated to maintain planarity following the collapse of bad edges. The sequence is demonstrated for an \textit{ex vivo} human heart example in \figref{cross2}.
 
-\begin{figure}[b!]
+\begin{figure}[h!]
 \centering
 \subfigure[]{%
 		\includegraphics[scale=0.09]{media/2-shabaka/3-clean-zoom/1-init-zoom.png}
@@ -277,7 +272,7 @@ These artifacts are addressed as follows: ``bad edges'' are identified as those 
 \label{fig:cross1}
 \end{figure}
 
-\begin{figure}[b!]
+\begin{figure}[h!]
 \centering
 \subfigure[]{%
 		\includegraphics[scale=0.08]{media/2-shabaka/4-clean/1-init.png}
@@ -295,17 +290,16 @@ These artifacts are addressed as follows: ``bad edges'' are identified as those 
 \caption{Cleanup of undesirable crosstalk facets for surface of \textit{ex vivo} human heart (corresponding image mask generated from MRI data from Cardiovascular Research Grid~\cite{cvgg}): (a) initial surface following Voronoi-based surface reconstruction, (b) identification of crosstalk facets (purple), (c) identification of edges to be collapsed (purple), and (d) final cleaned surface.}
 \label{fig:cross2}
 \end{figure}
-\noindent For the vast majority of bad-edge networks, the collapsing technique results in a smoother surface that remains closed and manifold. For regions of high curvature, there are rare cases in which collapsing a network may cause the surface to become non-manifold. Accordingly, the topologies of those particular bad-edge networks are not collapsed in order to preserve the manifold property. The current approach is thus unable to completely alleviate the issue of crosstalk facets in regions of high curvature. Fortunately, these remaining artifacts are small enough that the ensuing decimation step removes them. \\ \\
 %
-Regions of high curvature, or even sharp corners and edges, can be addressed via an enhancement of the point-cloud-generation algorithm described previously. The enhancement involves including additional templates when locally approximating boundaries, such that more than two Voronoi sites are generated for each sampling window. For example, three Voronoi sites can be used to produce an edge, and four sites can be used to produce a corner. In this manner, multiple boundary point/normal pairs for a single sampling window would naturally occur to reconstruct regions of high curvature.
+\noindent For the vast majority of bad-edge networks, the collapsing technique results in a smoother surface that remains closed and manifold. For regions of high curvature, there are rare cases in which collapsing a network may cause the surface to become non-manifold. Accordingly, the topologies of those particular bad-edge networks are detected, and collapsing is not done in order to preserve the manifold property.  Fortunately, even in regions of very high curvature, these remaining artifacts are small enough that the ensuing decimation step removes them.
 
 \subsubsection{Surface Decimation and Smoothing}
 
-Surface \textit{decimation} is performed to reduce the surface mesh to a practical resolution without significantly changing the geometry. The philosophy is to make use of as much information as is available to construct a surface mesh of the highest fidelity possible, and only then to address the practical consideration of mesh resolution for simulation or other purposes. The challenge, then, becomes decimating to a degree that does not result in undesired feature loss.  For purposes of the present algorithm, decimation is performed using the code \textit{ACVD}~\cite{valette_2004, valette_2008}, which clusters vertices and triangles to generate a coarser surface mesh whose resulting triangles exhibit desirable aspect ratios. The approach does not preserve sharp edges or corners, however; feature-preserving decimation is still very much an active topic of research. \textcolor{purple}{It is noted that, in the subsequent Performance Assessment section, this decimation step does not introduce any measurable error in reconstructing a spherical image mask for either marching cubes, screened Poisson, or the proposed method.} As is typical in b-rep construction algorithms, we apply smoothing as a final step. Specifically, Taubin smoothing~\cite{taubin1995signal, taubin_1995} is employed to produce smooth surfaces without significant loss of volume. \textcolor{purple}{The smoothing step is performed using the implemented of Taubin smoothing within \textit{Meshlab}~\cite{meshlab}}.
+Surface \textit{decimation} is performed to reduce the surface mesh to a practical resolution without significantly changing the geometry. The philosophy is to make use of as much information as is available to construct a surface mesh of the highest fidelity possible, and only then to address the practical consideration of mesh resolution for simulation or other purposes. The challenge, then, becomes decimating to a degree that does not result in undesired feature loss.  For purposes of the present algorithm, decimation is performed using the code \textit{ACVD} \cite{valette_2004, valette_2008}, which clusters vertices and triangles to generate a coarser surface mesh whose resulting triangles exhibit desirable aspect ratios. The approach does not preserve sharp edges or corners, however.  Feature-preserving decimation is still very much an active topic of research. \textcolor{purple}{It is noted that, in the subsequent Performance Assessment section, this decimation step does not introduce any measurable error in reconstructing a spherical image mask for either marching cubes, screened Poisson, or the proposed method.} As is typical in surface-reconstruction algorithms, we apply smoothing as a final step. Specifically, Taubin smoothing~\cite{taubin1995signal, taubin_1995} is employed to produce smooth surfaces without significant loss of volume. \textcolor{purple}{The smoothing step is performed using the implementation of Taubin smoothing within \textit{Meshlab} \cite{meshlab}}.
 
 \subsubsection{\textcolor{purple}{Parameter Selection}}
 
-Results of the entire surface generation procedure are shown in~\figref{shabakaseq} for an \textit{ex vivo} human heart example~\cite{cvgg}. The optimal parameters identified for robust surface generation are shown in~\tabref{Mod5}. \textcolor{purple}{The decimation and smoothing parameters were selected within \textit{ACVD} and \textit{Meshlab}, respectively.} The algorithm was rigorously tested with these parameters to produce closed, manifold, watertight surfaces for a wide variety of examples, as is shown in the next section. \\
+Results of the entire b-rep generation procedure are shown in \figref{shabakaseq} for an \textit{ex vivo} human heart example \cite{cvgg}. The optimal parameters identified for robust surface generation are shown in \tabref{Mod5}. \textcolor{purple}{The decimation and smoothing parameters were exported to \textit{ACVD} and \textit{Meshlab}, respectively.} The algorithm was rigorously tested with these parameters to produce closed, manifold, water-tight surfaces for several example inputs, as is shown in the next section.
 
 \begin{table}[h!]
  \centering
@@ -331,13 +325,6 @@ Results of the entire surface generation procedure are shown in~\figref{shabakas
 \caption{Optimal parameter values for b-rep generation.}
 \label{tab:Mod5}
 \end{table}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\textcolor{purple}{Workflow Summary}}
-\label{Workflow Summary}
-
-\color{purple}
-Text
 
 \color{black}
 \begin{figure}[]
