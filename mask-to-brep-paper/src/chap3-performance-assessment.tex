@@ -4,12 +4,12 @@
 The performance of the proposed method is assessed by comparing its results to those of \textcolor{purple}{different approaches, namely: 1) marching cubes, 2) Simpleware, a state-of-the-art commercial software, and 3) screened Poisson surface reconstruction. For the marching cubes approach, the same decimation and smoothing steps are performed as in the proposed method for fair comparison. For Simpleware, optimal results were obtained from \textcolor{purple}{Simpleware} by selecting the ``binarise before smoothing" option and performing 100 iterations of ``smart mask smoothing''; standard options were chosen otherwise. For the screened Poisson surface reconstruction approach, oriented point clouds generated as part of the proposed method are provided as input to the surface reconstruction method. The implementation of screened Poisson surface reconstruction in \textit{Meshlab} was utilized with its default parameters.} Performance is measured quantitatively for canonical image masks defined by spheres of various radii and locations, and qualitatively using a variety of real MRI and CT scans. \\ \\
 %
 We pursue a quantitative understanding of the performance of our method by considering a sphere of radius $R$ and center $\bm{C}$.  We assign a material identifier $m$ to each voxel in the image to define our spherical image mask; for the voxel with center at $\bm{v}$, the material assignment is:
-\begin{align} 
+\begin{linenomath}\begin{align} 
 	m &=  \begin{cases}
 		1, & \text{if}\ d \left(\bm{v},\bm{C}\right) \le R \\
 		0, & \text{otherwise},
 	\end{cases}
-\end{align}
+\end{align}\end{linenomath}
 where $d(\cdot,\cdot)$ is the Euclidean distance. The background image is assumed to have a 256 $\times$ 256 $\times$ 256 voxel resolution.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -27,7 +27,11 @@
 \usepackage{rotating}
 \usepackage{afterpage}
 \usepackage{mathtools}
+\usepackage{lineno}
 \usepackage{xcolor, etoolbox}
+\definecolor{mygray}{RGB}{220,220,220}
+\renewcommand{\linenumberfont}{\normalfont\tiny\sffamily\color{mygray}}
+\linenumbers
 \newcommand{\mb}[1]{\mathbf{#1}}
 \newcommand{\mc}[1]{\mathcal{#1}}
 \newcommand\blankpage{%
