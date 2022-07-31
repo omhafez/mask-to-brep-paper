@@ -64,20 +64,20 @@ Proceeding in this direction, let $\mc{D}$ be a sphere whose center and radius $
 \begin{figure}[b!]
 	\centering
 	\subfigure[Window $\mathcal{W}$]{%
-		\includegraphics[scale=0.72]{media/om/dem2.pdf}
+		\includegraphics[scale=0.72]{media/imgs-073022/om/dem2-3.pdf}
 		\label{fig:subfigure2}}
 	\subfigure[Approximating circle $\mathcal{D}$]{%
-		\includegraphics[scale=0.72]{media/om/dem3.pdf}
+		\includegraphics[scale=0.72]{media/imgs-073022/om/dem3-3.pdf}
 		\label{fig:subfigure3}}
 	
 	\subfigure[Approximating surface $\mathcal{S}$]{%
-		\includegraphics[scale=0.72]{media/om/dem4.pdf}
+		\includegraphics[scale=0.72]{media/imgs-073022/om/dem4-3.pdf}
 		\label{fig:subfigure4}}
 	\subfigure[Voxelated region $\Omega_p$]{%
-		\includegraphics[scale=0.72]{media/om/omp.pdf}
+		\includegraphics[scale=0.72]{media/imgs-073022/om/omp-3.pdf}
 		\label{fig:subfigure5}}
 	\subfigure[Approximating lens $\Omega$]{%
-		\includegraphics[scale=0.72]{media/om/om.pdf}
+		\includegraphics[scale=0.72]{media/imgs-073022/om/om-3.pdf}
 		\label{fig:subfigure6}}
 	
 	\caption{Boundary approximation demonstrated in 2D.}
@@ -155,11 +155,11 @@ The moments are transformed back to the global voxel-grid frame so that they can
 \end{gather}
 \noindent With all relevant quantities in place, the \textit{subplex search method}~\cite{rowan} is used to minimize the error function (\ref{obj func}) using an implementation in the package \textit{NLopt} \cite{nlo}. The method is a derivative-free method that is well-suited for optimizing objective functions that are noisy or discontinuous. It was selected as the optimization approach due to the existence of square roots in the objective function, and the fact that robustness to a wide range of inputs was the highest priority in developing the algorithm.
 
-Convergence is assumed to be achieved when $\left| \mathcal{F}_{k+1} - \mathcal{F}_{k}\right| < \varepsilon$ on successive iterations, where $k$ is the iteration number and  $\varepsilon$ is the convergence tolerance. For the specific examples and algorithm parameters discussed later in this section, convergence is achieved for each boundary approximation after typically hundreds of iterations. This large value may be due to the admittedly tight tolerance for $\varepsilon$ of $10^{-14}$; to nonlinearities or saddle points in the error function; or to possible inefficiencies in the nonlinear optimization tool used. However, the local optimization problems are small, with only three independent variables.  And, the algorithm generates high-quality results, with the process for all windows usually completing in less than one minute of wall clock time on a personal computer, even for complex geometries. Thus, convergence rate was not further explored as a means of improving the algorithm. \\ \\
-%
-Finally, we require that once convergence has been satisfied, the criterion $\mathcal{F} < \overline{\mathcal{F}}$ must also be met for the point and normal to be retained. In this way, when $\Omega$ unsatisfactorily approximates $\Omega_p$, the associated point and normal are discarded. This typically occurs in regions of high curvature, where a plane does not approximate the boundary well. The point cloud is dense enough that simply discarding these outlier points does not cause any discernible amount of undersampling of the surface. \\ \\
-%
-The solution to the minimization problem yields the values $d$, $\psi$, and $\theta$ that determine the optimal surface $\mathcal{S}$, from which the boundary point and normal are defined. \tabref{surface} can be consulted for a complete summary of variables discussed regarding local boundary approximation. \\
+Convergence is assumed to be achieved when $\left| \mathcal{F}_{k+1} - \mathcal{F}_{k}\right| < \varepsilon$ on successive iterations, where $k$ is the iteration number and  $\varepsilon$ is the convergence tolerance. For the specific examples and algorithm parameters discussed later in this section, convergence is achieved for each boundary approximation after typically hundreds of iterations. This large value may be due to the admittedly tight tolerance for $\varepsilon$ of $10^{-14}$; to nonlinearities or saddle points in the error function; or to possible inefficiencies in the nonlinear optimization tool used. However, the local optimization problems are small, with only three independent variables.  And, the algorithm generates high-quality results, with the process for all windows usually completing in less than one minute of wall clock time on a personal computer, even for complex geometries. Therefore, convergence rate was not further explored as a means of improving the algorithm.
+
+Finally, we require that once convergence has been satisfied, the criterion $\mathcal{F} < \overline{\mathcal{F}}$ must also be met for the point and normal to be retained. In this way, when $\Omega$ unsatisfactorily approximates $\Omega_p$, the associated point and normal are discarded. This typically occurs in regions of high curvature, where a plane does not approximate the boundary well. We note that, due to the subsequent use of Voronoi tessellation as a means of surface reconstruction, simply discarding a point does not cause a hole or other topological fault to occur in the final b-rep.  
+
+The solution to the minimization problem yields the values $d$, $\psi$, and $\theta$ that determine the optimal surface $\mathcal{S}$, from which the boundary point and normal are defined. \tabref{surface} can be consulted for a complete summary of variables discussed regarding local boundary approximation.
 
 \begin{table}[t!]
  \centering
@@ -202,9 +202,7 @@ The solution to the minimization problem yields the values $d$, $\psi$, and $\th
 
 Once the parameters $d$, $\psi$, and $\theta$ are selected for a particular window $\mathcal{W}$, a point location and outward normal must be determined. The outward-pointing normal is the negative of the first column of the transformation matrix $\bm{R}$: $\bm{n} = -(\cos\psi\cos\theta,\text{\ }\sin\psi\cos\theta,\text{\ }-\sin\theta)$. With the origin at the center of sphere $\mathcal{D}$, the location of the surface point is then simply $\mathbf{x}_p = -d\bm{n}$.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Surface Reconstruction \textcolor{purple}{Algorithm}}
+\subsection{Surface Reconstruction}
 \label{Surface Reconstruction}
 
 Surface reconstruction is the process of generating closed, manifold, polygonized surfaces from point clouds. Approaches found in the existing literature typically assume a dense, noisy population of points that are usually generated by structured light or laser-based scanners. Though the proposed algorithm departs from these assumptions to a degree, a brief review of surface reconstruction techniques is still worthwhile. \\ \\
