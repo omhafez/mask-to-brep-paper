@@ -209,7 +209,7 @@ Once the parameters $d$, $\psi$, and $\theta$ are selected for a particular wind
 \subsection{Surface Reconstruction}
 \label{Surface Reconstruction}
 
-The proposed surface-reconstruction technique relies on constructing a Voronoi partition, which is a nearest-neighbor tessellation of $\mathbb{R}^3$ based on a set of input \textit{Voronoi sites}. The desired output from a Voronoi partition is a mesh -- namely, a set of points, edges, facets, and cells and their connectivities, that discretize space. We first define the half-space $D(\bm{p},\bm{q})$ relative to a pair of sites $(\bm{p}, \bm{q})$:
+The proposed surface reconstruction technique relies on constructing a Voronoi partition, which is a nearest-neighbor tessellation of $\mathbb{R}^3$ based on a set of input \textit{Voronoi sites}. The desired output from a Voronoi partition is a mesh -- namely, a set of points, edges, facets, and cells and their connectivities, that discretize space. We first define the half-space $D(\bm{p},\bm{q})$ relative to a pair of sites $(\bm{p}, \bm{q})$:
 \begin{equation}
 D(\bm{p},\bm{q}) = \{\bm{x} \mid d(\bm{p},\bm{x}) \leq d(\bm{q},\bm{x})\},
 \end{equation}
@@ -218,7 +218,7 @@ where we take distance function $d$ to be the Euclidean distance.  Defining $\ma
 V(\bm{p}) = \bigcap \limits_{\bm{q} \in \mathcal{P}, \bm{q} \neq \bm{p}} D(\bm{p},\bm{q}).
 \end{equation} See \cite{aurenhammer_1991} for a survey of the mathematical properties of, and algorithmic approaches to constructing, Voronoi partitions.
 
-The proposed surface-reconstruction technique involves the following steps:
+The proposed surface reconstruction technique involves the following steps:
 \vspace{3mm}
 \begin{itemize}[noitemsep]
 \item Generate the Voronoi site set from the oriented point cloud, and create the Voronoi partition.
@@ -299,7 +299,7 @@ For the vast majority of bad-edge networks, the collapsing technique results in 
 
 \subsubsection{Decimation and smoothing}
 
-Surface \textit{decimation} is performed to reduce the surface mesh to a practical resolution without significantly changing the geometry. The philosophy is to make use of as much information as is available to construct a surface mesh of the highest fidelity possible, and only then to address the practical consideration of mesh resolution for simulation or other purposes. The challenge, then, becomes decimating to a degree that does not result in undesired feature loss.  For purposes of the present algorithm, decimation is performed using the code \textit{ACVD} \cite{valette_2004, valette_2008}, which clusters vertices and triangles to generate a coarser surface mesh whose resulting triangles exhibit desirable aspect ratios. The approach does not preserve sharp edges or corners, however.  Feature-preserving decimation is still very much an active topic of research. It is noted that, in the subsequent Performance Assessment section, this decimation step does not introduce any measurable error in reconstructing a spherical image mask for sufficient b-rep resolution for either marching cubes, screened Poisson, or the proposed method. As is typical in surface-reconstruction algorithms, we apply smoothing as a final step. Specifically, Taubin smoothing~\cite{taubin1995signal, taubin_1995} is employed to produce smooth surfaces without significant loss of volume. The smoothing step is performed using the implementation of Taubin smoothing within \textit{Meshlab} \cite{meshlab}.
+Surface \textit{decimation} is performed to reduce the surface mesh to a practical resolution without significantly changing the geometry. The philosophy is to make use of as much information as is available to construct a surface mesh of the highest fidelity possible, and only then to address the practical consideration of mesh resolution for simulation or other purposes. The challenge, then, becomes decimating to a degree that does not result in undesired feature loss.  For purposes of the present algorithm, decimation is performed using the code \textit{ACVD} \cite{valette_2004, valette_2008}, which clusters vertices and triangles to generate a coarser surface mesh whose resulting triangles exhibit desirable aspect ratios. The approach does not preserve sharp edges or corners, however.  Feature-preserving decimation is still very much an active topic of research. It is noted that, in the subsequent Performance Assessment section, this decimation step does not introduce any measurable error in reconstructing a spherical image mask for sufficient b-rep resolution for either marching cubes, screened Poisson, or the proposed method. As is typical in surface reconstruction algorithms, we apply smoothing as a final step. Specifically, Taubin smoothing~\cite{taubin1995signal, taubin_1995} is employed to produce smooth surfaces without significant loss of volume. The smoothing step is performed using the implementation of Taubin smoothing within \textit{Meshlab} \cite{meshlab}.
 
 \subsubsection{Parameter selection}
 
