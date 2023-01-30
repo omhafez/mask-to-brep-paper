@@ -115,7 +115,7 @@ As a final point of quantitative comparison, the proposed method is compared to 
 Lastly, we present several qualitative comparisons based on real image masks generated from MRI and CT.  All images were segmented using \textit{Seg3D} \cite{Seg3D}.  B-rep resolutions were matched in all cases, to make for fair comparisons.  In the case of the proposed method, each example completed on a 16 GB RAM laptop in less than 5 minutes. See \figref{example-meshes} for comparisons of the image masks and resulting b-reps.  Visual inspection suggests that the proposed method qualitatively performs at least as well as the comparison workflows, and visibly better over regions of low curvature.   In this connection, we mention that the proposed method readily accommodates an enhancement that admits sharp edges and vertices (or corners), making the method particularly suitable for industrial applications involving manufactured objects.  Work on this enhancement is in progress.  
 \begin{figure}[h!]
 	\centering
-	 \includegraphics[scale=0.145]{media/7-performance/realExamples072022.pdf}
+	 \includegraphics[scale=0.15]{media/7-performance/realExamples012923-rescale.pdf}
 	\caption{{Comparison of proposed method with different approaches for various input image masks generated from MRI and CT scans. Note the proposed method's robustness to noisy inputs for the brain (second), distal femur (third), and equine proximal sesamoid (bottom). Sources: heart~\cite{cvgg}, brain~\cite{marcus_2007}, distal femur~\cite{epperson_2013}, pelvis~\cite{clark_2013}, L5 lumbar~\cite{yao_2016}, and equine proximal sesamoid~\cite{shaffer2021}}}
 	\label{fig:example-meshes}
 \end{figure}
