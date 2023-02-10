@@ -72,7 +72,7 @@ Proceeding in this direction, let $\mc{D}$ be a sphere whose center and radius $
 		\label{fig:subfigure3}}
 	
 	\subfigure[Approximating surface $\mathcal{S}$]{%
-		\includegraphics[scale=0.72]{media/imgs-073022/om/dem4-3.pdf}
+		\includegraphics[scale=0.72]{media/imgs-073022/om/dem4-32.pdf}
 		\label{fig:subfigure4}}
 	\subfigure[Voxelated region $\Omega_p$]{%
 		\includegraphics[scale=0.72]{media/imgs-073022/om/omp-3.pdf}
@@ -96,7 +96,7 @@ Analogous quantities $V$, $I_x$, etc. are defined for $\Omega$.  Placing the coo
 
 \begin{linenomath}\begin{figure}[h]
 	\centering
-		\includegraphics[scale=0.3]{media/om/window.pdf}
+		\includegraphics[scale=0.3]{media/om/window2.pdf}
 	\caption{Plane boundary approximation demonstrated in 2D.}
 	\label{fig:quad}
 \end{figure}\end{linenomath}
@@ -119,9 +119,9 @@ where index notation is employed $(1 \rightarrow x, 2 \rightarrow y, 3 \rightarr
 \label{obj func}
 \mathcal{F}(d,\psi,\theta) = \beta_0e_0 + \beta_1e_1 + \beta_2e_2,
 \end{align}\end{linenomath}
-where $\beta_i$ are adjustable weights in the range $(0,1)$ and $\sum \limits_i\beta_i = 1$.  The error $\mc{F}$ is an explicit function of the parameters $d$, $\psi$, and $\theta$, where $\psi$ and $\theta$ are the orientation angles of the plane normal relative to the voxel axes $(x, y, z)$, and $d$ is the plane's offset from the centroid of the window.
+where $\beta_i$ are adjustable weights in the range $(0,1)$ and $\sum \limits_i\beta_i = 1$.  The error $\mc{F}$ is an explicit function of the parameters $d$, $\psi$, and $\theta$, where $\psi$ and $\theta$ are the \textcolor{blue}{polar} angles of the plane normal relative to the voxel axes $(x, y, z)$, and $d$ is the plane's offset from the centroid of the window.
 
-We seek the solution to the following unconstrained minimization problem: $\displaystyle \min_{d, \psi, \theta} \mathcal{F}(d,\psi,\theta)$, which can be solved by a variety of well-established techniques once the moments of $\Omega$ and $\Omega_p$ are defined. The moments of $\Omega_p$ are computed based on a straightforward use of voxel dimensions and the parallel axis theorem. The moments of $\Omega$, on the other hand, are first computed as a function of $d$ in the primed coordinate system, and then transformed to the $(x, y, z)$ frame based on $\psi$ and $\theta$. The relevant geometric quantities in the primed system are computed as follows:
+We seek the solution to the following unconstrained minimization problem: $\displaystyle \min_{d, \psi, \theta} \mathcal{F}(d,\psi,\theta)$, which can be solved by a variety of well-established techniques once the moments of $\Omega$ and $\Omega_p$ are defined. The moments of $\Omega_p$ are computed based on a straightforward use of voxel dimensions and the parallel axis theorem. The moments of $\Omega$, on the other hand, are first computed as a function of $d$ in the primed coordinate system, and then transformed to the $(x, y, z)$ frame based on $\psi$ and $\theta$. The relevant geometric quantities in the primed system are computed as follows \textcolor{blue}{($p, V^*, I^*_{x'x'},$ and $I^*_{y'y'}$ are sub-expressions that are used in the subsequent primed geometric quantities)}:
 \begin{linenomath}\begin{align}
 {p^2} &= R^2 - d^2, \\
 V^* &= 2\pi\left[-\frac{1}{2}dp^2 + \frac{1}{3}R^3 - \frac{1}{3}(R^2 - p^2)^{3/2} \right], \\
@@ -129,7 +129,7 @@ I^*_{x'x'} &= \frac{\pi}{30}\left[-15dp^4 + \sqrt{R^2-p^2}\left(12p^4 - 4p^2R^2 
 I^*_{y'y'} &= \frac{\pi}{480}\left[-160d^3p^2 + 128R^5 - \sqrt{R^2-p^2}\left(128R^4 - 96p^2R^2 - 32p^4\right) - 120dp^4 \right],
 \end{align}\end{linenomath}
 \begin{linenomath}\begin{align} 
-V &=  \begin{cases}
+V' = V &=  \begin{cases}
       V^*, & \text{if}\ d \geq 0 \\
       V^* + \frac{4\pi}{3}\left(R^2-p^2\right)^{3/2}, & \text{otherwise}
     \end{cases}\\
@@ -146,7 +146,7 @@ I_{y'y'} &=  \begin{cases}
     \end{cases} \\
 I_{z'z'} &= I_{y'y'}.
 \end{align}\end{linenomath}
-As expected, some moments exhibit symmetries about the $y'$ and $z'$ axes.
+\textcolor{blue}{The above results represent analytic evaluations of the integrals shown in (1-4), but relative to the primed coordinate system, such that $x'$ is the polar axis of the lens-shaped region $\Omega$.  These tedious but straightforward calculations are most easily carried out by first integrating over circular slabs, and lastly over the interval $x' \in [d, R]$.  In the $d < 0$ case, additional terms occur in the zeroth- and second-order moments; hence the resort to the starred sub-expressions above to achieve the most compact representation possible.}  As expected, some moments exhibit symmetries relative to the $y'$ and $z'$ axes.
 
 The moments are transformed back to the global voxel-grid frame so that they can be compared to those of $\Omega_p$. This transformation is different for the zeroth, first, and second polynomial moments due to the different tensor rank for each of these quantities. The first and second polynomial moments are transformed in the following manner (no transformation is required for the zeroth moment):
 \begin{linenomath}\begin{gather}
